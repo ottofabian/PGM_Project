@@ -50,6 +50,7 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
             header=None,
             sep="\t",
             skip_blank_lines=False,
+            quotechar="\'",
             dtype={
                 0: str,
                 1: str
