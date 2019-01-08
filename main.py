@@ -14,6 +14,7 @@ import time
 
 from hmm import HMM
 from utils import preprocess_raw_data, load_data_list, train_test_split, show_misclassifications
+from feature_extractor import get_pos_features, get_ner_features
 
 
 # -----------------------------------------------------------------------------
