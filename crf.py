@@ -21,27 +21,27 @@ class CRF():
     """
     Conditional Random Field class.
     """
-    
+
     def __init__(self):
         """
         Constructor.
         """
         pass
-    
-    
+
+
     def fit(self, X):
         """
         Fits the model.
-        
+
         :param X:           training data
         """
         pass
-    
-        
+
+
     def predict(self, X):
         """
         Predicts the labels.
-        
+
         :param X:
         """
         pass

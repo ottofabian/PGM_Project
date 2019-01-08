@@ -29,7 +29,7 @@ from random import shuffle
 def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
     """
     Loads the data set.
-    
+
     :param path:            path to the data root folder
     :param max_:            number of documents to be loaded
     :param load_entities:   flag indicating whether to load entities or not
@@ -50,6 +50,7 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
             header=None,
             sep="\t",
             skip_blank_lines=False,
+            quotechar="\'",
             dtype={
                 0: str,
                 1: str
@@ -70,7 +71,7 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
 def split(df, mask):
     """
     Splits data frame into sentences.
-    
+
     :param df:          data frame to split
     :param mask:        mask indicating where to split
     :return:            split data set
@@ -90,7 +91,7 @@ def split(df, mask):
 def save_data_list(data_list, path):
     """
     Saves data list to a text file.
-    
+
     :param data_list:   data list to be saved
     :param path:        path to save the file to
     """
@@ -101,7 +102,7 @@ def save_data_list(data_list, path):
 def load_data_list(file_name):
     """
     Reads data list file.
-    
+
     :param file_name:   name of the file to be loaded
     :return:            data list
     """
@@ -114,7 +115,7 @@ def load_data_list(file_name):
 def train_test_split(data, train_ratio=0.8):
     """
     Splits the data into training and test set.
-    
+
     :param data:        data to be slit into training and test set
     :param test_ratio:  percentage of test data
     :return:            data_train, data_test
@@ -128,7 +129,7 @@ def train_test_split(data, train_ratio=0.8):
 def separate_labels_from_features(X):
     """
     Separates labels from features.
-    
+
     :param X:           words with labels in the form: [[(w1, t1), (w2, t2), ...], [...], ...]
     :return:            features, labels
     """
@@ -139,17 +140,17 @@ def separate_labels_from_features(X):
     for sent in X:
         features_sub = []
         labels_sub = []
-        
+
         # iterate over all words in the sentence
         for (w, t) in sent:
             features_sub.append(w)
             labels_sub.append(t)
-        
+
         # add sublist to overall result
         features.append(features_sub)
         labels.append(labels_sub)
-        
-    return features, labels 
+
+    return features, labels
 
 
 def show_misclassifications(gold_labels, pred_labels):
@@ -175,14 +176,14 @@ def show_misclassifications(gold_labels, pred_labels):
 def plot_confusion_matrix(cm, classes, title="Confusion matrix", cmap=plt.cm.Blues):
     """
     This function prints and plots the confusion matrix.
-    
+
     :param cm:          confusion matrix object
-    :param classes:     
+    :param classes:
     """
     np.set_printoptions(precision=2)
     plt.figure(figsize=(20, 20))
     matplotlib.rcParams.update({"font.size": 20})
-    
+
     # normalize confusion matrix
     cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
 
@@ -190,7 +191,7 @@ def plot_confusion_matrix(cm, classes, title="Confusion matrix", cmap=plt.cm.Blu
     plt.imshow(cm, interpolation="nearest", cmap=cmap)
     plt.title(title)
     plt.colorbar()
-    
+
     tick_marks = np.arange(len(classes))
     plt.xticks(tick_marks, classes, rotation=45)
     plt.yticks(tick_marks, classes)
