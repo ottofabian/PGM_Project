@@ -61,7 +61,7 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
         # replace quotations with single label
         df.replace("\tLQU\t", '"', inplace=True)
         df.replace("\tRQU\t", '"', inplace=True)
-        df.replace("[]", "QU", inplace=True)
+        df.replace("[]", "QU" if not load_entities else "O", inplace=True)
         df.replace('None', np.nan, inplace=True)
 
         list_.append(df)

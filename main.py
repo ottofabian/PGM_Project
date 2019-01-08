@@ -22,7 +22,7 @@ from utils import preprocess_raw_data, load_data_list, \
 
 # global variables
 preprocessing = True
-load_entities = False
+load_entities = True
 
 
 def main():
