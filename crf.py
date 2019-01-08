@@ -33,6 +33,7 @@ class CRF(object):
             max_iterations=max_iter,
             all_possible_transitions=all_possible_transitions
         )
+        
 
     def fit(self, X, y):
         """
@@ -42,6 +43,7 @@ class CRF(object):
         :param y: training labels
         """
         self.crf.fit(X, y)
+        
 
     def predict(self, X):
         """
