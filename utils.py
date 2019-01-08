@@ -44,17 +44,27 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
     for file_ in all_files:
         print(file_)
         df = pd.read_csv(
-            file_,
+            "./gmb-2.2.0/data/p51/d0431/en.tags",
             index_col=None,
             usecols=[0, 1 if not load_entities else 3],
             header=None,
             sep="\t",
             skip_blank_lines=False,
-            quotechar="\'",
+            quotechar="\"",
+            engine='python',
+            doublequote=False,
             dtype={
                 0: str,
-                1: str
+                1: str,
+                # 3: str
             })
+
+        # replace quotations with single label
+        df.replace("\tLQU\t", '"', inplace=True)
+        df.replace("\tRQU\t", '"', inplace=True)
+        df.replace("[]", "QU", inplace=True)
+        df.replace('None', np.nan, inplace=True)
+
         list_.append(df)
 
     frame = pd.concat(list_, axis=0, ignore_index=True)

@@ -6,23 +6,21 @@ Created on Tue Jan  8 10:47:08 2019
 @author: Clemens Biehl, Fabian Otto, Daniel Wehner
 """
 
-# -----------------------------------------------------------------------------
-# Imports
-# -----------------------------------------------------------------------------
-
 import time
 
-from hmm import HMM
-from utils import preprocess_raw_data, load_data_list, train_test_split, show_misclassifications
+import pandas as pd
+import numpy as np
 
+from hmm import HMM
+from utils import preprocess_raw_data, load_data_list, train_test_split, show_misclassifications, split
 
 # -----------------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------------
 
 # global variables
-preprocessing = False
-load_entities = True
+preprocessing = True
+load_entities = False
 
 
 def main():
@@ -45,16 +43,48 @@ def main():
     start_time = time.time()
     hmm.fit(data_train)
     print(f"Duration of training: {time.time() - start_time}")
-     # evaluation
+    # evaluation
     print(hmm.predict(
         ["This is a house .".split(),
          "This is Peter Parker .".split()]
     ))
 
     hmm.evaluate(data_test[:100])
+
+
 #    show_misclassifications(data_test, prediction)
 
 
 # execute main program
 if __name__ == "__main__":
     main()
+
+    # df = pd.read_csv(
+    #     "./gmb-2.2.0/data/p51/d0431/en.tags",
+    #     index_col=None,
+    #     usecols=[0, 1 if not load_entities else 3],
+    #     header=None,
+    #     sep="\t",
+    #     skip_blank_lines=False,
+    #     quotechar="\"",
+    #     engine='python',
+    #     doublequote=False,
+    #     dtype={
+    #         0: str,
+    #         1: str,
+    #         # 3: str
+    #     })
+    # df.replace("\tLQU\t", '"', inplace=True)
+    # df.replace("\tRQU\t", '"', inplace=True)
+    # df.replace("[]", "QU", inplace=True)
+    # df.replace('None', np.nan, inplace=True)
+    #
+    # # print(df.iloc[19])
+    # # df.fillna(value=pd.np.nan, inplace=True)
+    # # print(type(df.iloc[19, 0]))
+    # mask = pd.isna(df[0])
+    # print(mask.iloc[19])
+    # data = split(df, mask)
+    # print(df.iloc[94].values)
+    # print(df.iloc[1].values)
+    # print(data)
