@@ -18,6 +18,9 @@ import re
 # -----------------------------------------------------------------------------
 
 class Feature_Maker():
+    """
+    Feature Maker class.
+    """
     
     def __init__(self):
         """
@@ -31,10 +34,9 @@ class Feature_Maker():
         Convert token to shape string
         E.g. 35-Year -> dd-Xxxx
         
-        @param: t - input token
-        @returns: shape string
+        :param t:       input token
+        :return:        shape string
         """
-        
         t = re.sub('[A-Z]', 'X', t)
         t = re.sub('[a-z]', 'x', t)
         
@@ -45,26 +47,26 @@ class Feature_Maker():
         """
         Generate feature set for POS tagging
         
-        @param X: list of tuples [(word1, postag1), (word2, postag2), ...]
-        @returns: dict of features
+        :param X:       list of tuples [(w1, t1), (w2, t2), ...]
+        :return:        dict of features
         """
-        
         X_ = []
         
         for i, x in enumerate(X):
-            features = {"word": x,
-                        "lowercasedword": x.lower(),
-                        "prefix1": x[0],
-                        "prefix2": x[:2],
-                        "prefix3": x[:3],
-                        "suffix1": x[-1],
-                        "suffix2": x[-2:],
-                        "suffix3": x[-3:],
-                        "capitalization": x[0].isupper(),
-                        "shape": self._wordshape(x),
-                        "previousword": X[i-1] if i > 1 else "<BEGIN>",
-                        "nextword": X[i+1] if i < len(X)-1 else "<END>"}
-            
+            features = {
+                "word": x,
+                "lowercasedword": x.lower(),
+                "prefix1": x[0],
+                "prefix2": x[:2],
+                "prefix3": x[:3],
+                "suffix1": x[-1],
+                "suffix2": x[-2:],
+                "suffix3": x[-3:],
+                "capitalization": x[0].isupper(),
+                "shape": self._wordshape(x),
+                "previousword": X[i-1] if i > 1 else "<BEGIN>",
+                "nextword": X[i+1] if i < len(X)-1 else "<END>"
+            }
             X_.append(features)
             
         return X_
@@ -77,7 +79,6 @@ class Feature_Maker():
         @param X: list of tuples [(word1, postag1), (word2, postag2), ...]
         @returns: dict of features
         """
-        
         X_ = []
         
         for i, x in enumerate(X):

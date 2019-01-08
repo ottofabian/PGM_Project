@@ -26,7 +26,6 @@ class Naive_Bayes():
         """
         Constructor.
         """
-        
         self.clf = MultinomialNB(alpha=alpha, fit_prior=fit_prior, class_prior=class_prior)
     
     
@@ -37,7 +36,6 @@ class Naive_Bayes():
         :param X: training data
         :param y: training labels
         """
-        
         self.clf.fit(X, y)
     
     
@@ -48,5 +46,4 @@ class Naive_Bayes():
         :param X:           data to predict labels for
         :return:            labels for the data
         """
-        
         return self.clf.predict(X)
