@@ -11,28 +11,36 @@ import nltk
 from nltk.tag import hmm
 
 
-class HMM(nltk.tag.HiddenMarkovModelTagger):
+class CustomTagger(nltk.tag.HiddenMarkovModelTagger):
+
+    def __init__(self, symbols, states, transitions, outputs, priors):
+        super().__init__(symbols, states, transitions, outputs, priors)
+
+    def _tag(self, unlabeled_sequence):
+        path = self._best_path(unlabeled_sequence)
+        return unlabeled_sequence, path
+
+
+class HMM(nltk.tag.HiddenMarkovModelTrainer):
     """
     Hidden Markov Model class.
     """
-    
+
     def __init__(self):
         """
         Constructor.
         """
-        super(self, HMM).__init__()
+        super().__init__()
         self.trainer = hmm.HiddenMarkovModelTrainer()
-    
-    
+
     def fit(self, X_train):
         """
         Fit model using data.
         
         :param X_train:     training data in the form: [[(w1, t1), (w2, t2), ...], [...], ...]
         """
-        self.tagger = self.trainer.train_supervised(X_train)
-    
-    
+        self.train_supervised(X_train)
+
     def predict(self, X):
         """
         Predict pos/ner tags.
@@ -41,13 +49,12 @@ class HMM(nltk.tag.HiddenMarkovModelTagger):
         :return:            words with labels in the form: [[(w1, t1), (w2, t2), ...], [...], ...]
         """
         prediction = []
-        
+
         for sent in X:
             prediction.append(self.tagger.tag(sent))
-            
+
         return prediction
-    
-    
+
     def evaluate(self, X):
         """
         Evaluate the classifier.
@@ -55,22 +62,26 @@ class HMM(nltk.tag.HiddenMarkovModelTagger):
         :param X:           data to test on
         :return:            evaluation results
         """
-#        self.tagger.test(X)
+        #        self.tagger.test(X)
         unlabeled_data = []
         labels = []
-        
-        # separate data from labels
-        for sent in X:
-            sub_unlabeled_data = []
-            sub_labels = []
-            for (w, t) in sent:
-                sub_unlabeled_data.append(w)
-                sub_labels.append(t)
-            unlabeled_data.append(sub_unlabeled_data)
-            labels.append(sub_labels)
-        
+
+        # # separate data from labels
+        # for sent in X:
+        #     sub_unlabeled_data = []
+        #     sub_labels = []
+        #     for (w, t) in sent:
+        #         sub_unlabeled_data.append(w)
+        #         sub_labels.append(t)
+        #     unlabeled_data.append(sub_unlabeled_data)
+        #     labels.append(sub_labels)
+
         # get predictions for data
         prediction = self.predict(unlabeled_data)
-                
-                
-    
+
+    def train_supervised(self, labelled_sequences, estimator=None):
+        tagger = super().train_supervised(labelled_sequences, estimator)
+        return CustomTagger(self._symbols, self._states, tagger._transitions, tagger._outputs, tagger._priors)
+
+    def train_unsupervised(self, unlabeled_sequences, update_outputs=True, **kwargs):
+        raise NotImplementedError()

@@ -17,6 +17,7 @@ import pandas as pd
 
 from random import shuffle
 
+
 # -----------------------------------------------------------------------------
 # Load data
 # -----------------------------------------------------------------------------
@@ -32,10 +33,10 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
     """
     print("Loading data...")
     all_files = glob.glob(os.path.join(path, "*/*/en.tags"))
-    
+
     list_ = []
     all_files = all_files[:max_]
-    
+
     for file_ in all_files:
         print(file_)
         df = pd.read_csv(
@@ -50,12 +51,14 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
                 1: str
             })
         list_.append(df)
-        
+
     frame = pd.concat(list_, axis=0, ignore_index=True)
     mask = pd.isna(frame[0])
     data = split(frame, mask)
-    save_data_list(data)
-    
+
+    path = "data_POS.txt" if not load_entities else "data_NER.txt"
+    save_data_list(data, path)
+
     print("Finished loading data.")
     return data
 
@@ -69,23 +72,24 @@ def split(df, mask):
     """
     result = []
     start = 0
-    
+
     for i in range(df.shape[0] - 1):
         if mask[i]:
             # get tuples from subset
             result.append([tuple(x) for x in df[start:i].values])
             start = i + 1
-    
+
     return result
 
 
-def save_data_list(data_list):
+def save_data_list(data_list, path):
     """
     Saves data list to a text file.
     
     :param data_list:   data list to be saved
+    :param path:        path to save the file to
     """
-    with open("data.txt", "wb") as f:
+    with open(path, "wb") as f:
         pickle.dump(data_list, f)
 
 
@@ -98,7 +102,7 @@ def load_data_list(file_name):
     """
     with open(file_name, "rb") as f:
         data_list = pickle.load(f)
-        
+
     return data_list
 
 
@@ -119,20 +123,19 @@ def train_test_split(data, train_ratio=0.8):
 def show_misclassifications(gold_labels, pred_labels):
     """
     Show misclassifications made by the model.
-    
+
     :param gold_labels: true labels
     :param pred_labels: predicted labels
     """
     if len(gold_labels) != len(pred_labels):
         raise Exception("Gold labels and predicted labels don't have equal shape")
-    
+
     # flatten lists for comparison
     flatten = lambda l: [item for sublist in l for item in sublist]
     gold_labels = flatten(gold_labels)
     pred_labels = flatten(pred_labels)
-    
+
     for i in len(gold_labels):
         if pred_labels[i][1] != gold_labels[i][1]:
             print(gold_labels[i][0], "\t",
                   pred_labels[i][1], "\t", gold_labels[i][1])
-            
