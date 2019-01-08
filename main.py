@@ -7,9 +7,10 @@ Created on Tue Jan  8 10:47:08 2019
 """
 
 import time
+import pandas as pd
 
 from hmm import HMM
-from utils import preprocess_raw_data, load_data_list, train_test_split, show_misclassifications
+from utils import preprocess_raw_data, load_data_list, train_test_split, show_misclassifications, split
 
 preprocessing = False
 load_entities = True
@@ -49,3 +50,19 @@ def main():
 # execute main program
 if __name__ == "__main__":
     main()
+    
+#    df = pd.read_csv(
+#        "/Users/Daniel/Documents/PGM_Project/gmb-2.2.0/data/p51/d0431/en.tags",
+#        index_col=None,
+#        usecols=[0, 1 if not load_entities else 3],
+#        header=None,
+#        sep="\t",
+#        skip_blank_lines=False,
+#        dtype={
+#            0: str,
+#            1: str
+#        })
+#    
+#    mask = pd.isna(df[0])
+#    data = split(df, mask)
+#    print(data)
