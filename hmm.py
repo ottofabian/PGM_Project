@@ -39,6 +39,7 @@ class CustomTagger(nltk.tag.HiddenMarkovModelTagger):
         """
         # call super constructor
         super().__init__(symbols, states, transitions, outputs, priors)
+        
 
     def _tag(self, unlabeled_sequence):
         """
@@ -67,6 +68,7 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         super().__init__()
         self.trainer = hmm.HiddenMarkovModelTrainer()
         self.tagger = None
+        
 
     def fit(self, X):
         """
@@ -75,6 +77,7 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         :param X:           training data in the form: [[(w1, t1), (w2, t2), ...], [...], ...]
         """
         self.tagger = self.train_supervised(X)
+        
 
     def predict(self, X):
         """
@@ -90,6 +93,7 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
             prediction.append(y)
 
         return prediction
+    
 
     def evaluate(self, X):
         """
@@ -110,6 +114,7 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         cfm = sklearn.metrics.confusion_matrix(labels, y)
 
         plot_confusion_matrix(cfm, np.unique(labels))
+        
 
     def train_supervised(self, labelled_sequences, estimator=None):
         """
@@ -121,6 +126,7 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         """
         tagger = super().train_supervised(labelled_sequences, estimator)
         return CustomTagger(self._symbols, self._states, tagger._transitions, tagger._outputs, tagger._priors)
+    
 
     def train_unsupervised(self, unlabeled_sequences, update_outputs=True, **kwargs):
         """
