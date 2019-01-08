@@ -5,26 +5,57 @@ Created on Tue Jan  8 10:39:19 2019
 
 @author: Clemens Biehl, Fabian Otto, Daniel Wehner
 """
-import numpy as np
-import sklearn
+
+# -----------------------------------------------------------------------------
+# Imports
+# -----------------------------------------------------------------------------
 
 import nltk
+import sklearn
+import numpy as np
 
 from nltk.tag import hmm
+from utils import plot_confusion_matrix, separate_labels_from_features
 
-from utils import plot_confusion_matrix
 
+# -----------------------------------------------------------------------------
+# CustomTagger class
+# -----------------------------------------------------------------------------
 
 class CustomTagger(nltk.tag.HiddenMarkovModelTagger):
-
+    """
+    Custom Tagger class.
+    """
+    
     def __init__(self, symbols, states, transitions, outputs, priors):
+        """
+        Constructor.
+        
+        :param symbols:
+        :param states:
+        :param transitions:
+        :param outputs:
+        :param priors:
+        """
+        # call super constructor
         super().__init__(symbols, states, transitions, outputs, priors)
 
+
     def _tag(self, unlabeled_sequence):
+        """
+        Tags the data.
+        
+        :param unlabeled_sequence:
+        :return:
+        """
         path = self._best_path(unlabeled_sequence)
         return unlabeled_sequence, path
 
 
+# -----------------------------------------------------------------------------
+# Hidden Markov Model class
+# -----------------------------------------------------------------------------
+        
 class HMM(nltk.tag.HiddenMarkovModelTrainer):
     """
     Hidden Markov Model class.
@@ -38,13 +69,15 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         self.trainer = hmm.HiddenMarkovModelTrainer()
         self.tagger = None
 
+
     def fit(self, X):
         """
         Fit model using data.
         
-        :param X:     training data in the form: [[(w1, t1), (w2, t2), ...], [...], ...]
+        :param X:           training data in the form: [[(w1, t1), (w2, t2), ...], [...], ...]
         """
         self.tagger = self.train_supervised(X)
+
 
     def predict(self, X):
         """
@@ -61,6 +94,7 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
 
         return prediction
 
+
     def evaluate(self, X):
         """
         Evaluate the classifier.
@@ -68,22 +102,10 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         :param X:           data to test on
         :return:            evaluation results
         """
-        #        self.tagger.test(X)
-        unlabeled_data = []
-        labels = []
-
-        # separate data from labels
-        for sent in X:
-            sub_unlabeled_data = []
-            sub_labels = []
-            for (w, t) in sent:
-                sub_unlabeled_data.append(w)
-                sub_labels.append(t)
-            unlabeled_data.append(sub_unlabeled_data)
-            labels.append(sub_labels)
+        features, labels = separate_labels_from_features(X)
 
         # get predictions for data
-        y = self.predict(unlabeled_data)
+        y = self.predict(features)
 
         labels = nltk.flatten(labels)
         y = nltk.flatten(y)
@@ -93,9 +115,24 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
 
         plot_confusion_matrix(cfm, np.unique(labels))
 
+
     def train_supervised(self, labelled_sequences, estimator=None):
+        """
+        Trains model in supervised fashion.
+        
+        :param labelled_sequences:
+        :param estimator:
+        :return:
+        """
         tagger = super().train_supervised(labelled_sequences, estimator)
         return CustomTagger(self._symbols, self._states, tagger._transitions, tagger._outputs, tagger._priors)
 
+
     def train_unsupervised(self, unlabeled_sequences, update_outputs=True, **kwargs):
+        """
+        Trains model in unsupervised fashion.
+        
+        :param unlabeled_sequences:
+        :param update_outputs:
+        """
         raise NotImplementedError()

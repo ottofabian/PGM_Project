@@ -6,11 +6,18 @@ Created on Tue Jan  8 20:01:05 2019
 @author: Daniel
 """
 
-# imports
+# -----------------------------------------------------------------------------
+# Imports
+# -----------------------------------------------------------------------------
+
 import nltk
 
 from nltk.classify import NaiveBayesClassifier
 
+
+# -----------------------------------------------------------------------------
+# Naive Bayes class
+# -----------------------------------------------------------------------------
 
 class Naive_Bayes():
     """
@@ -19,7 +26,7 @@ class Naive_Bayes():
     
     def __init__(self):
         """
-        
+        Constructor.
         """
         pass
     
@@ -27,6 +34,8 @@ class Naive_Bayes():
     def fit(self, X):
         """
         Fit the model to the data.
+        
+        :param X:           training data
         """
         pass
     
@@ -34,5 +43,8 @@ class Naive_Bayes():
     def predict(self, X):
         """
         Predict pos/ner tags.
+        
+        :param X:           data to predict labels for
+        :return:            labels for the data
         """
         pass
