@@ -6,10 +6,12 @@ Created on Tue Jan  8 10:39:19 2019
 @author: Clemens Biehl, Fabian Otto, Daniel Wehner
 """
 
+import nltk
+
 from nltk.tag import hmm
 
 
-class HMM():
+class HMM(nltk.tag.HiddenMarkovModelTagger):
     """
     Hidden Markov Model class.
     """
@@ -18,6 +20,7 @@ class HMM():
         """
         Constructor.
         """
+        super(self, HMM).__init__()
         self.trainer = hmm.HiddenMarkovModelTrainer()
     
     
@@ -37,7 +40,12 @@ class HMM():
         :param X:           data to predict labels for
         :return:            words with labels in the form: [[(w1, t1), (w2, t2), ...], [...], ...]
         """
-        return self.tagger.tag(X)
+        prediction = []
+        
+        for sent in X:
+            prediction.append(self.tagger.tag(sent))
+            
+        return prediction
     
     
     def evaluate(self, X):
@@ -47,5 +55,22 @@ class HMM():
         :param X:           data to test on
         :return:            evaluation results
         """
-        self.tagger.test(X)
+#        self.tagger.test(X)
+        unlabeled_data = []
+        labels = []
+        
+        # separate data from labels
+        for sent in X:
+            sub_unlabeled_data = []
+            sub_labels = []
+            for (w, t) in sent:
+                sub_unlabeled_data.append(w)
+                sub_labels.append(t)
+            unlabeled_data.append(sub_unlabeled_data)
+            labels.append(sub_labels)
+        
+        # get predictions for data
+        prediction = self.predict(unlabeled_data)
+                
+                
     

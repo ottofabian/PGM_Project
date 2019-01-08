@@ -114,3 +114,25 @@ def train_test_split(data, train_ratio=0.8):
     shuffle(data)
     idx = int(len(data) * train_ratio)
     return data[:idx], data[idx:]
+
+
+def show_misclassifications(gold_labels, pred_labels):
+    """
+    Show misclassifications made by the model.
+    
+    :param gold_labels: true labels
+    :param pred_labels: predicted labels
+    """
+    if len(gold_labels) != len(pred_labels):
+        raise Exception("Gold labels and predicted labels don't have equal shape")
+    
+    # flatten lists for comparison
+    flatten = lambda l: [item for sublist in l for item in sublist]
+    gold_labels = flatten(gold_labels)
+    pred_labels = flatten(pred_labels)
+    
+    for i in len(gold_labels):
+        if pred_labels[i][1] != gold_labels[i][1]:
+            print(gold_labels[i][0], "\t",
+                  pred_labels[i][1], "\t", gold_labels[i][1])
+            
