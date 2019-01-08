@@ -21,11 +21,10 @@ import matplotlib.pyplot as plt
 
 from random import shuffle
 
+
 # -----------------------------------------------------------------------------
 # Load data
 # -----------------------------------------------------------------------------
-from sklearn.metrics import confusion_matrix
-
 
 def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
     """
@@ -161,7 +160,7 @@ def plot_confusion_matrix(cm, classes,
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         # print("Normalized confusion matrix")
     # else:
-        # print('Confusion matrix, without normalization')
+    # print('Confusion matrix, without normalization')
 
     # print(cm)
 
