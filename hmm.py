@@ -5,10 +5,14 @@ Created on Tue Jan  8 10:39:19 2019
 
 @author: Clemens Biehl, Fabian Otto, Daniel Wehner
 """
+import numpy as np
+import sklearn
 
 import nltk
 
 from nltk.tag import hmm
+
+from utils import plot_confusion_matrix
 
 
 class CustomTagger(nltk.tag.HiddenMarkovModelTagger):
@@ -32,14 +36,15 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         """
         super().__init__()
         self.trainer = hmm.HiddenMarkovModelTrainer()
+        self.tagger = None
 
-    def fit(self, X_train):
+    def fit(self, X):
         """
         Fit model using data.
         
-        :param X_train:     training data in the form: [[(w1, t1), (w2, t2), ...], [...], ...]
+        :param X:     training data in the form: [[(w1, t1), (w2, t2), ...], [...], ...]
         """
-        self.train_supervised(X_train)
+        self.tagger = self.train_supervised(X)
 
     def predict(self, X):
         """
@@ -51,7 +56,8 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         prediction = []
 
         for sent in X:
-            prediction.append(self.tagger.tag(sent))
+            _, y = self.tagger.tag(sent)
+            prediction.append(y)
 
         return prediction
 
@@ -66,18 +72,26 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         unlabeled_data = []
         labels = []
 
-        # # separate data from labels
-        # for sent in X:
-        #     sub_unlabeled_data = []
-        #     sub_labels = []
-        #     for (w, t) in sent:
-        #         sub_unlabeled_data.append(w)
-        #         sub_labels.append(t)
-        #     unlabeled_data.append(sub_unlabeled_data)
-        #     labels.append(sub_labels)
+        # separate data from labels
+        for sent in X:
+            sub_unlabeled_data = []
+            sub_labels = []
+            for (w, t) in sent:
+                sub_unlabeled_data.append(w)
+                sub_labels.append(t)
+            unlabeled_data.append(sub_unlabeled_data)
+            labels.append(sub_labels)
 
         # get predictions for data
-        prediction = self.predict(unlabeled_data)
+        y = self.predict(unlabeled_data)
+
+        labels = nltk.flatten(labels)
+        y = nltk.flatten(y)
+
+        print(sklearn.metrics.precision_recall_fscore_support(labels, y))
+        cfm = sklearn.metrics.confusion_matrix(labels, y)
+
+        plot_confusion_matrix(cfm, np.unique(labels))
 
     def train_supervised(self, labelled_sequences, estimator=None):
         tagger = super().train_supervised(labelled_sequences, estimator)

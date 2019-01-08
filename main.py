@@ -36,13 +36,12 @@ def main():
     hmm.fit(data_train)
     print(f"Duration of training: {time.time() - start_time}")
     # evaluation
-    print(hmm.predict(
-        ["This is a house .".split(),
-         "This is Peter Parker .".split()]
-    ))
+    # print(hmm.predict(
+    #     ["This is a house .".split(),
+    #      "This is Peter Parker .".split()]
+    # ))
 
-
-#    hmm.evaluate(data_test)
+    hmm.evaluate(data_test[:100])
 #
 #    show_misclassifications(data_test, prediction)
 

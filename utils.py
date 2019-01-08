@@ -8,19 +8,24 @@ Created on Mon Nov 26 09:40:23 2018
 # -----------------------------------------------------------------------------
 # Imports
 # -----------------------------------------------------------------------------
-
+import itertools
 import os
 import glob
 import pickle
+
+import matplotlib
+import nltk
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from random import shuffle
-
 
 # -----------------------------------------------------------------------------
 # Load data
 # -----------------------------------------------------------------------------
+from sklearn.metrics import confusion_matrix
+
 
 def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
     """
@@ -131,11 +136,51 @@ def show_misclassifications(gold_labels, pred_labels):
         raise Exception("Gold labels and predicted labels don't have equal shape")
 
     # flatten lists for comparison
-    flatten = lambda l: [item for sublist in l for item in sublist]
-    gold_labels = flatten(gold_labels)
-    pred_labels = flatten(pred_labels)
+    gold_labels = nltk.flatten(gold_labels)
+    pred_labels = nltk.flatten(pred_labels)
 
-    for i in len(gold_labels):
+    for i in range(len(gold_labels)):
         if pred_labels[i][1] != gold_labels[i][1]:
             print(gold_labels[i][0], "\t",
                   pred_labels[i][1], "\t", gold_labels[i][1])
+
+
+def plot_confusion_matrix(cm, classes,
+                          normalize=False,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    np.set_printoptions(precision=2)
+    plt.figure(figsize=(20, 20))
+    matplotlib.rcParams.update({'font.size': 25})
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        # print("Normalized confusion matrix")
+    # else:
+        # print('Confusion matrix, without normalization')
+
+    # print(cm)
+
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, format(cm[i, j], fmt),
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.tight_layout()
+
+    plt.show()
