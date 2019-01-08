@@ -3,23 +3,27 @@
 """
 Created on Tue Jan  8 10:47:08 2019
 
-@author: Clemens Biehl, Fabian Otto, Daniel Wehner
+@author: Clemens, Fabian Otto, Daniel Wehner
 """
+
+# -----------------------------------------------------------------------------
+# Imports
+# -----------------------------------------------------------------------------
 
 import time
 
-import pandas as pd
-import numpy as np
-
 from hmm import HMM
-from utils import preprocess_raw_data, load_data_list, train_test_split, show_misclassifications, split
+from utils import preprocess_raw_data, load_data_list, \
+    train_test_split, show_misclassifications, separate_labels_from_features
+from feature_extractor import get_pos_features, get_ner_features
+
 
 # -----------------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------------
 
 # global variables
-preprocessing = True
+preprocessing = False
 load_entities = False
 
 
@@ -35,24 +39,24 @@ def main():
         path = "data_POS.txt" if not load_entities else "data_NER.txt"
         data = load_data_list(path)
 
-    # split data into training and test set    
+    # split data into training and test set
     data_train, data_test = train_test_split(data, train_ratio=0.80)
 
-    # fit model
+    # fit hidden markov model model
+    # -------------------------------------------------------------------------
     hmm = HMM()
     start_time = time.time()
     hmm.fit(data_train)
     print(f"Duration of training: {time.time() - start_time}")
+
     # evaluation
-    print(hmm.predict(
-        ["This is a house .".split(),
-         "This is Peter Parker .".split()]
-    ))
-
+    # -------------------------------------------------------------------------
+    # plot confusion matrix, calculate precision, recall, f1-score
     hmm.evaluate(data_test[:100])
-
-
-#    show_misclassifications(data_test, prediction)
+    # show misclassifications
+#    features_test, labels_test = separate_labels_from_features(data_test)
+#    predictions = hmm.predict(features_test)
+#    show_misclassifications(data_test, predictions)
 
 
 # execute main program

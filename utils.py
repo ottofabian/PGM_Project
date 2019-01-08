@@ -2,7 +2,7 @@
 """
 Created on Mon Nov 26 09:40:23 2018
 
-@author: Clemens Biehl, Fabian Otto, Daniel Wehner
+@author: Clemens, Fabian Otto, Daniel Wehner
 """
 
 # -----------------------------------------------------------------------------
@@ -170,17 +170,15 @@ def show_misclassifications(gold_labels, pred_labels):
     :param gold_labels: true labels
     :param pred_labels: predicted labels
     """
-    if len(gold_labels) != len(pred_labels):
-        raise Exception("Gold labels and predicted labels don't have equal shape")
-
     # flatten lists for comparison
-    gold_labels = nltk.flatten(gold_labels)
-    pred_labels = nltk.flatten(pred_labels)
+    flatten = lambda l: [item for sublist in l for item in sublist]
+    gold_labels = flatten(gold_labels)
+    pred_labels = flatten(pred_labels)
 
     for i in range(len(gold_labels)):
-        if pred_labels[i][1] != gold_labels[i][1]:
-            print(gold_labels[i][0], "\t",
-                  pred_labels[i][1], "\t", gold_labels[i][1])
+        if pred_labels[i] != gold_labels[i][1]:
+            print(gold_labels[i][0], "\t", 
+                  pred_labels[i], "\t", gold_labels[i][1])
 
 
 def plot_confusion_matrix(cm, classes, title="Confusion matrix", cmap=plt.cm.Blues):
@@ -192,7 +190,7 @@ def plot_confusion_matrix(cm, classes, title="Confusion matrix", cmap=plt.cm.Blu
     """
     np.set_printoptions(precision=2)
     plt.figure(figsize=(20, 20))
-    matplotlib.rcParams.update({"font.size": 20})
+    matplotlib.rcParams.update({"font.size": 10})
 
     # normalize confusion matrix
     cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
