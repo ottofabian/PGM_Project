@@ -15,6 +15,7 @@ import time
 from hmm import HMM
 from utils import preprocess_raw_data, load_data_list, \
     train_test_split, show_misclassifications, separate_labels_from_features
+from feature_extractor import get_pos_features, get_ner_features
 
 
 # -----------------------------------------------------------------------------
@@ -38,7 +39,7 @@ def main():
         path = "data_POS.txt" if not load_entities else "data_NER.txt"
         data = load_data_list(path)
 
-    # split data into training and test set    
+    # split data into training and test set
     data_train, data_test = train_test_split(data, train_ratio=0.80)
 
     # fit hidden markov model model
@@ -47,7 +48,7 @@ def main():
     start_time = time.time()
     hmm.fit(data_train)
     print(f"Duration of training: {time.time() - start_time}")
-    
+
     # evaluation
     # -------------------------------------------------------------------------
     # plot confusion matrix, calculate precision, recall, f1-score
