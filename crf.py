@@ -3,14 +3,14 @@
 """
 Created on Tue Jan  8 10:40:42 2019
 
-@author: Clemens Biehl, Fabian Otto, Daniel Wehner
+@author: Clemens, Fabian Otto, Daniel Wehner
 """
 
 # -----------------------------------------------------------------------------
 # Imports
 # -----------------------------------------------------------------------------
 
-# tbd
+import sklearn_crfsuite
 
 
 # -----------------------------------------------------------------------------
@@ -22,20 +22,29 @@ class CRF():
     Conditional Random Field class.
     """
 
-    def __init__(self):
+    def __init__(self, c1=0.1, c2=0.1, max_iter=100, all_possible_transitions=True, algorithm="lbfgs"):
         """
         Constructor.
         """
-        pass
+        
+        self.crf = sklearn_crfsuite.CRF(
+            algorithm=algorithm,
+            c1=c1,
+            c2=c2,
+            max_iterations=max_iter,
+            all_possible_transitions=all_possible_transitions
+        )
 
 
-    def fit(self, X):
+    def fit(self, X, y):
         """
         Fits the model.
 
-        :param X:           training data
+        :param X: training data
+        :param y: training labels
         """
-        pass
+        
+        self.crf.fit(X, y)
 
 
     def predict(self, X):
@@ -44,4 +53,5 @@ class CRF():
 
         :param X:
         """
-        pass
+        
+        return self.crf.predict(X)

@@ -3,7 +3,7 @@
 """
 Created on Tue Jan  8 10:47:08 2019
 
-@author: Clemens Biehl, Fabian Otto, Daniel Wehner
+@author: Clemens, Fabian Otto, Daniel Wehner
 """
 
 # -----------------------------------------------------------------------------
