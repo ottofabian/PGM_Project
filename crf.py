@@ -17,7 +17,7 @@ import sklearn_crfsuite
 # Conditional Random Field
 # -----------------------------------------------------------------------------
 
-class CRF():
+class CRF(object):
     """
     Conditional Random Field class.
     """
@@ -34,7 +34,6 @@ class CRF():
             all_possible_transitions=all_possible_transitions
         )
 
-
     def fit(self, X, y):
         """
         Fits the model.
@@ -43,7 +42,6 @@ class CRF():
         :param y: training labels
         """
         self.crf.fit(X, y)
-
 
     def predict(self, X):
         """

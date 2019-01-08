@@ -26,7 +26,7 @@ class CustomTagger(nltk.tag.HiddenMarkovModelTagger):
     """
     Custom Tagger class.
     """
-    
+
     def __init__(self, symbols, states, transitions, outputs, priors):
         """
         Constructor.
@@ -39,7 +39,6 @@ class CustomTagger(nltk.tag.HiddenMarkovModelTagger):
         """
         # call super constructor
         super().__init__(symbols, states, transitions, outputs, priors)
-
 
     def _tag(self, unlabeled_sequence):
         """
@@ -55,7 +54,7 @@ class CustomTagger(nltk.tag.HiddenMarkovModelTagger):
 # -----------------------------------------------------------------------------
 # Hidden Markov Model class
 # -----------------------------------------------------------------------------
-        
+
 class HMM(nltk.tag.HiddenMarkovModelTrainer):
     """
     Hidden Markov Model class.
@@ -69,7 +68,6 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         self.trainer = hmm.HiddenMarkovModelTrainer()
         self.tagger = None
 
-
     def fit(self, X):
         """
         Fit model using data.
@@ -77,7 +75,6 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         :param X:           training data in the form: [[(w1, t1), (w2, t2), ...], [...], ...]
         """
         self.tagger = self.train_supervised(X)
-
 
     def predict(self, X):
         """
@@ -93,7 +90,6 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
             prediction.append(y)
 
         return prediction
-
 
     def evaluate(self, X):
         """
@@ -115,7 +111,6 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
 
         plot_confusion_matrix(cfm, np.unique(labels))
 
-
     def train_supervised(self, labelled_sequences, estimator=None):
         """
         Trains model in supervised fashion.
@@ -126,7 +121,6 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         """
         tagger = super().train_supervised(labelled_sequences, estimator)
         return CustomTagger(self._symbols, self._states, tagger._transitions, tagger._outputs, tagger._priors)
-
 
     def train_unsupervised(self, unlabeled_sequences, update_outputs=True, **kwargs):
         """
