@@ -177,7 +177,7 @@ def show_misclassifications(gold_labels, pred_labels):
 
     for i in range(len(gold_labels)):
         if pred_labels[i] != gold_labels[i][1]:
-            print(gold_labels[i][0], "\t", 
+            print(gold_labels[i][0], "\t",
                   pred_labels[i], "\t", gold_labels[i][1])
 
 
