@@ -37,10 +37,10 @@ class Feature_Maker():
         :param t:       input token
         :return:        shape string
         """
-        t = re.sub('[A-Z]', 'X', t)
-        t = re.sub('[a-z]', 'x', t)
+        t = re.sub("[A-Z]", "X", t)
+        t = re.sub("[a-z]", "x", t)
         
-        return re.sub('[0-9]', 'd', t)
+        return re.sub("[0-9]", "d", t)
     
     
     def get_pos_features(self, X):
@@ -128,7 +128,7 @@ class Feature_Maker():
                     "+1:shape": self._wordshape(word1)
                 })
             else:
-                features['EOS'] = True
+                features["EOS"] = True
                 
             X_.append(features)
     

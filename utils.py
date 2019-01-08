@@ -14,7 +14,6 @@ import pickle
 import itertools
 
 import matplotlib
-import nltk
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt

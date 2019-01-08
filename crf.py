@@ -26,7 +26,6 @@ class CRF():
         """
         Constructor.
         """
-        
         self.crf = sklearn_crfsuite.CRF(
             algorithm=algorithm,
             c1=c1,
@@ -43,7 +42,6 @@ class CRF():
         :param X: training data
         :param y: training labels
         """
-        
         self.crf.fit(X, y)
 
 
@@ -53,5 +51,4 @@ class CRF():
 
         :param X:
         """
-        
         return self.crf.predict(X)
