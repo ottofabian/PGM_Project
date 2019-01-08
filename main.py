@@ -15,15 +15,13 @@ import time
 from hmm import HMM
 from utils import preprocess_raw_data, load_data_list, \
     train_test_split, show_misclassifications, separate_labels_from_features
-from feature_extractor import get_pos_features, get_ner_features
-
 
 # -----------------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------------
 
 # global variables
-preprocessing = False
+preprocessing = True
 load_entities = False
 
 
@@ -54,6 +52,8 @@ def main():
     # plot confusion matrix, calculate precision, recall, f1-score
     hmm.evaluate(data_test[:100])
     # show misclassifications
+
+
 #    features_test, labels_test = separate_labels_from_features(data_test)
 #    predictions = hmm.predict(features_test)
 #    show_misclassifications(data_test, predictions)
