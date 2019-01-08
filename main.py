@@ -9,7 +9,7 @@ Created on Tue Jan  8 10:47:08 2019
 import time
 
 from hmm import HMM
-from utils import preprocess_raw_data, load_data_list, train_test_split
+from utils import preprocess_raw_data, load_data_list, train_test_split, show_misclassifications
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
         data = load_data_list("data.txt")
     
     # split data into training and test set    
-    data_train, data_test = train_test_split(data, train_ratio=0.8)
+    data_train, data_test = train_test_split(data, train_ratio=0.80)
     
     # fit model
     hmm = HMM()
@@ -33,11 +33,15 @@ def main():
     hmm.fit(data_train)
     print(f"Duration of training: {time.time() - start_time}")
     # evaluation
-    print(hmm.predict("This is a house .".split()))
-    hmm.evaluate(data_test)
+    print(hmm.predict(
+        ["This is a house .".split(),
+         "This is Peter Parker .".split()]
+    ))
+#    hmm.evaluate(data_test)
+#    
+#    show_misclassifications(data_test, prediction)
     
 
 # execute main program
 if __name__ == "__main__":
     main()
-    
