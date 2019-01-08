@@ -6,13 +6,22 @@ Created on Tue Jan  8 10:47:08 2019
 @author: Clemens Biehl, Fabian Otto, Daniel Wehner
 """
 
+# -----------------------------------------------------------------------------
+# Imports
+# -----------------------------------------------------------------------------
+
 import time
-import pandas as pd
 
 from hmm import HMM
-from utils import preprocess_raw_data, load_data_list, train_test_split, show_misclassifications, split
+from utils import preprocess_raw_data, load_data_list, train_test_split, show_misclassifications
 
-preprocessing = True
+
+# -----------------------------------------------------------------------------
+# Main
+# -----------------------------------------------------------------------------
+
+# global variables
+preprocessing = False
 load_entities = True
 
 
@@ -36,36 +45,16 @@ def main():
     start_time = time.time()
     hmm.fit(data_train)
     print(f"Duration of training: {time.time() - start_time}")
-    # evaluation
-    # print(hmm.predict(
-    #     ["This is a house .".split(),
-    #      "This is Peter Parker .".split()]
-    # ))
+     # evaluation
+    print(hmm.predict(
+        ["This is a house .".split(),
+         "This is Peter Parker .".split()]
+    ))
 
     hmm.evaluate(data_test[:100])
-
-
-#
 #    show_misclassifications(data_test, prediction)
 
 
 # execute main program
 if __name__ == "__main__":
     main()
-
-    # df = pd.read_csv(
-    #     "./gmb-2.2.0/data/p51/d0431/en.tags",
-    #     index_col=None,
-    #     usecols=[0, 1 if not load_entities else 3],
-    #     header=None,
-    #     sep="\t",
-    #     skip_blank_lines=False,
-    #     quotechar="\'",
-    #     dtype={
-    #         0: str,
-    #         1: str
-    #     })
-    #
-    # mask = pd.isna(df[0])
-    # data = split(df, mask)
-    # print(data)
