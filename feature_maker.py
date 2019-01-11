@@ -122,12 +122,13 @@ class Feature_Maker():
         @returns: dict of features
         """
         X_ = []
+        X = flatten(X)
         
         for i, x in enumerate(X):
             word = x[0]
             postag = x[1]
         
-            features = {
+            instance = ({
                 "bias": 1.0,
                 "lowercasedword": word.lower(),
                 "prefix1": word[0],
@@ -142,12 +143,12 @@ class Feature_Maker():
                 "postag": postag,
                 "basepos": postag[:2],
                 "shape": self._wordshape(word)
-            }
+            }, postag)
             
             if i > 0:
                 word1 = X[i-1][0]
                 postag1 = X[i-1][1]
-                features.update({
+                instance[0].update({
                     "-1:lowercasedword": word1.lower(),
                     "-1:istitle": word1.istitle(),
                     "-1:isuppercase": word1.isupper(),
@@ -156,12 +157,12 @@ class Feature_Maker():
                     "-1:shape": self._wordshape(word1)
                 })
             else:
-                features['BOS'] = True
+                instance[0]['BOS'] = True
         
             if i < len(X) - 1:
                 word1 = X[i+1][0]
                 postag1 = X[i+1][1]
-                features.update({
+                instance[0].update({
                     "+1:lowercasedword": word1.lower(),
                     "+1:istitle": word1.istitle(),
                     "+1:isuppercase": word1.isupper(),
@@ -170,9 +171,9 @@ class Feature_Maker():
                     "+1:shape": self._wordshape(word1)
                 })
             else:
-                features["EOS"] = True
+                instance[0]["EOS"] = True
                 
-            X_.append(features)
+            X_.append(instance)
     
         return X_
 

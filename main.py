@@ -24,7 +24,7 @@ from utils import preprocess_raw_data, load_data_list, \
 
 # global variables
 preprocessing = False # true: create txt file from data, false: load existing txt file with preprocessed data
-load_entities = False # true: ner, false: pos-tagging
+load_entities = True  # true: ner, false: pos-tagging
 
 
 def main():
@@ -64,14 +64,16 @@ def main():
     # fit naive bayes model
     # -------------------------------------------------------------------------
     nb = Naive_Bayes()
-    data_train_featurized = feature_maker.get_pos_features_nltk(data_train)
+#    data_train_featurized = feature_maker.get_pos_features_nltk(data_train)
+    data_train_featurized = feature_maker.get_ner_features_nltk(data_train)
     start_time = time.time()
     nb.fit_nltk(data_train_featurized)
     print(f"Duration of training: {time.time() - start_time}")
     
     # evaluation naive bayes
     # -------------------------------------------------------------------------
-    data_test_featurized = feature_maker.get_pos_features_nltk(data_test)
+#    data_test_featurized = feature_maker.get_pos_features_nltk(data_test)
+    data_test_featurized = feature_maker.get_ner_features_nltk(data_test)
     print("Accuracy: ", nb.evaluate_nltk(data_test_featurized))
     # most informative features
     nb.clf_nltk.show_most_informative_features(50)
