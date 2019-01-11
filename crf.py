@@ -66,3 +66,13 @@ class CRF():
         return metrics.flat_f1_score(y, y_pred, average='weighted')
     
     
+    def classification_report(self, X, y):
+        """
+        Evaluates the trained crf model.
+        
+        :param X:
+        """
+        y_pred = self.crf.predict(X)
+        
+        print(metrics.flat_classification_report(y, y_pred, digits=3))
+        
