@@ -140,20 +140,20 @@ class Feature_Maker():
                 "isuppercase": word.isupper(),
                 "istitle": word.istitle(),
                 "isdigit": word.isdigit(),
-                "postag": postag,
-                "basepos": postag[:2],
+#                "postag": postag,
+#                "basepos": postag[:2],
                 "shape": self._wordshape(word)
             }, postag)
             
             if i > 0:
                 word1 = X[i-1][0]
-                postag1 = X[i-1][1]
+#                postag1 = X[i-1][1]
                 instance[0].update({
                     "-1:lowercasedword": word1.lower(),
                     "-1:istitle": word1.istitle(),
                     "-1:isuppercase": word1.isupper(),
-                    "-1:postag": postag1,
-                    "-1:basepos": postag1[:2],
+#                    "-1:postag": postag1,
+#                    "-1:basepos": postag1[:2],
                     "-1:shape": self._wordshape(word1)
                 })
             else:
@@ -161,13 +161,13 @@ class Feature_Maker():
         
             if i < len(X) - 1:
                 word1 = X[i+1][0]
-                postag1 = X[i+1][1]
+#                postag1 = X[i+1][1]
                 instance[0].update({
                     "+1:lowercasedword": word1.lower(),
                     "+1:istitle": word1.istitle(),
                     "+1:isuppercase": word1.isupper(),
-                    "+1:postag": postag1,
-                    "+1:basepos": postag1[:2],
+#                    "+1:postag": postag1,
+#                    "+1:basepos": postag1[:2],
                     "+1:shape": self._wordshape(word1)
                 })
             else:

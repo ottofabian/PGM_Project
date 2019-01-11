@@ -13,6 +13,7 @@ Created on Tue Jan  8 10:47:08 2019
 import time
 
 from hmm import HMM
+from crf import CRF
 from naive_bayes import Naive_Bayes
 from feature_maker import Feature_Maker
 from utils import preprocess_raw_data, load_data_list, \
@@ -63,20 +64,26 @@ def main():
     
     # fit naive bayes model
     # -------------------------------------------------------------------------
-    nb = Naive_Bayes()
-#    data_train_featurized = feature_maker.get_pos_features_nltk(data_train)
-    data_train_featurized = feature_maker.get_ner_features_nltk(data_train)
-    start_time = time.time()
-    nb.fit_nltk(data_train_featurized)
-    print(f"Duration of training: {time.time() - start_time}")
+#    nb = Naive_Bayes()
+##    data_train_featurized = feature_maker.get_pos_features_nltk(data_train)
+#    data_train_featurized = feature_maker.get_ner_features_nltk(data_train)
+#    start_time = time.time()
+#    nb.fit_nltk(data_train_featurized)
+#    print(f"Duration of training: {time.time() - start_time}")
     
     # evaluation naive bayes
     # -------------------------------------------------------------------------
-#    data_test_featurized = feature_maker.get_pos_features_nltk(data_test)
-    data_test_featurized = feature_maker.get_ner_features_nltk(data_test)
-    print("Accuracy: ", nb.evaluate_nltk(data_test_featurized))
-    # most informative features
-    nb.clf_nltk.show_most_informative_features(50)
+##    data_test_featurized = feature_maker.get_pos_features_nltk(data_test)
+#    data_test_featurized = feature_maker.get_ner_features_nltk(data_test)
+#    print("Accuracy: ", nb.evaluate_nltk(data_test_featurized))
+#    # most informative features
+#    nb.clf_nltk.show_most_informative_features(50)
+    
+    # fit crf model
+    # -------------------------------------------------------------------------
+    crf = CRF()
+#    crf.fit()
+#    crf.evaluate()
 
 
 # execute main program

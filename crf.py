@@ -17,7 +17,7 @@ import sklearn_crfsuite
 # Conditional Random Field
 # -----------------------------------------------------------------------------
 
-class CRF(object):
+class CRF():
     """
     Conditional Random Field class.
     """
@@ -39,8 +39,8 @@ class CRF(object):
         """
         Fits the model.
 
-        :param X: training data
-        :param y: training labels
+        :param X:   training data
+        :param y:   training labels
         """
         self.crf.fit(X, y)
         
@@ -49,6 +49,16 @@ class CRF(object):
         """
         Predicts the labels.
 
-        :param X:
+        :param X:   data to predict labels for
+        :return:    labels for the data
         """
         return self.crf.predict(X)
+    
+    
+    def evaluate(self, X):
+        """
+        Evaluates the trained crf model.
+        
+        :param X:
+        """
+        pass
