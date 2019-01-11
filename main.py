@@ -80,33 +80,3 @@ def main():
 # execute main program
 if __name__ == "__main__":
     main()
-
-    # df = pd.read_csv(
-    #     "./gmb-2.2.0/data/p51/d0431/en.tags",
-    #     index_col=None,
-    #     usecols=[0, 1 if not load_entities else 3],
-    #     header=None,
-    #     sep="\t",
-    #     skip_blank_lines=False,
-    #     quotechar="\"",
-    #     engine='python',
-    #     doublequote=False,
-    #     dtype={
-    #         0: str,
-    #         1: str,
-    #         # 3: str
-    #     })
-    # df.replace("\tLQU\t", '"', inplace=True)
-    # df.replace("\tRQU\t", '"', inplace=True)
-    # df.replace("[]", "QU", inplace=True)
-    # df.replace('None', np.nan, inplace=True)
-    #
-    # # print(df.iloc[19])
-    # # df.fillna(value=pd.np.nan, inplace=True)
-    # # print(type(df.iloc[19, 0]))
-    # mask = pd.isna(df[0])
-    # print(mask.iloc[19])
-    # data = split(df, mask)
-    # print(df.iloc[94].values)
-    # print(df.iloc[1].values)
-    # print(data)

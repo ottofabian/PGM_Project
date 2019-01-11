@@ -31,7 +31,7 @@ class Naive_Bayes():
         self.clf = MultinomialNB(alpha=alpha, fit_prior=fit_prior, class_prior=class_prior)
     
     
-    def fit(self, X, y):
+    def fit_sklearn(self, X, y):
         """
         Fit the model to the data.
         
@@ -50,7 +50,7 @@ class Naive_Bayes():
         self.clf_nltk = nltk.NaiveBayesClassifier.train(X)
     
     
-    def predict(self, X):
+    def predict_sklearn(self, X):
         """
         Predict pos/ner tags.
         
@@ -58,6 +58,17 @@ class Naive_Bayes():
         :return:            labels for the data
         """
         return self.clf.predict(X)
+    
+    
+    def predict_nltk(self, X):
+        """
+        Predict pos/ner tags.
+        
+        :param X:           data to predict labels for
+        :return:            labels for the data
+        """
+        pass
+    
     
     
     def evaluate_nltk(self, X):

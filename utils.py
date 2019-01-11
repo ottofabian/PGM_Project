@@ -43,7 +43,7 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
     for file_ in all_files:
         print(file_)
         df = pd.read_csv(
-            "./gmb-2.2.0/data/p51/d0431/en.tags",
+            file_,
             index_col=None,
             usecols=[0, 1 if not load_entities else 3],
             header=None,
