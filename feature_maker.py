@@ -11,6 +11,9 @@ Created on Tue Jan  8 20:45:57 2019
 # -----------------------------------------------------------------------------
 
 import re
+import numpy as np
+
+from utils import flatten
 
 
 # -----------------------------------------------------------------------------
@@ -43,7 +46,7 @@ class Feature_Maker():
         return re.sub("[0-9]", "d", t)
     
     
-    def get_pos_features(self, X):
+    def get_pos_features_nltk(self, X):
         """
         Generate feature set for POS tagging
         
@@ -51,28 +54,67 @@ class Feature_Maker():
         :return:        dict of features
         """
         X_ = []
+        X = flatten(X)
         
         for i, x in enumerate(X):
-            features = {
-                "word": x,
-                "lowercasedword": x.lower(),
-                "prefix1": x[0],
-                "prefix2": x[:2],
-                "prefix3": x[:3],
-                "suffix1": x[-1],
-                "suffix2": x[-2:],
-                "suffix3": x[-3:],
-                "capitalization": x[0].isupper(),
-                "shape": self._wordshape(x),
-                "previousword": X[i-1] if i > 1 else "<BEGIN>",
-                "nextword": X[i+1] if i < len(X)-1 else "<END>"
-            }
-            X_.append(features)
+            word = x[0]
+            postag = x[1]
+            
+            instance = ({
+                "word": word,
+                "lowercasedword": word.lower(),
+                "prefix1": word[0],
+                "prefix2": word[:2],
+                "prefix3": word[:3],
+                "suffix1": word[-1],
+                "suffix2": word[-2:],
+                "suffix3": word[-3:],
+                "capitalization": word[0].isupper(),
+                "shape": self._wordshape(word),
+                "previousword": X[i-1][0] if i > 1 else "<BEGIN>",
+                "nextword": X[i+1][0] if i < len(X)-1 else "<END>"
+            }, postag)
+            X_.append(instance)
             
         return X_
     
     
-    def get_ner_features(self, X):
+    def get_pos_features_sklearn(self, X):
+        """
+        Generate feature set for POS tagging
+        
+        :param X:       list of tuples [(w1, t1), (w2, t2), ...]
+        :return:        dict of features
+        """
+        X_ = []
+        y_ = []
+        X = flatten(X)
+        
+        for i, x in enumerate(X):
+            word = x[0]
+            postag = x[1]
+            
+            features = [
+                word,                                   # word
+                word.lower(),                           # lowercaseword
+                word[0],                                # prefix1
+                word[:2],                               # prefix2
+                word[:3],                               # prefix3
+                word[-1],                               # suffix1
+                word[-2:],                              # suffix2
+                word[-3:],                              # suffix3
+                word[0].isupper(),                      # capitalization
+                self._wordshape(word),                  # shape
+                X[i-1][0] if i > 1 else "<BEGIN>",      # previousword
+                X[i+1][0] if i < len(X)-1 else "<END>"  # nextword
+            ]
+            X_.append(features)
+            y_.append(postag)
+            
+        return np.asarray(X_), np.asarray(y_)
+    
+    
+    def get_ner_features_nltk(self, X):
         """
         Generate feature set for NER tagging
         

@@ -170,7 +170,6 @@ def show_misclassifications(gold_labels, pred_labels):
     :param pred_labels: predicted labels
     """
     # flatten lists for comparison
-    flatten = lambda l: [item for sublist in l for item in sublist]
     gold_labels = flatten(gold_labels)
     pred_labels = flatten(pred_labels)
 
@@ -178,6 +177,16 @@ def show_misclassifications(gold_labels, pred_labels):
         if pred_labels[i] != gold_labels[i][1]:
             print(gold_labels[i][0], "\t",
                   pred_labels[i], "\t", gold_labels[i][1])
+            
+            
+def flatten(l):
+    """
+    Flattens a list.
+    
+    :param l:           list to be flattened
+    :return:            flattened list
+    """
+    return [item for sublist in l for item in sublist]
 
 
 def plot_confusion_matrix(cm, classes, title="Confusion matrix", cmap=plt.cm.Blues):

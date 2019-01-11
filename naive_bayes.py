@@ -10,6 +10,8 @@ Created on Tue Jan  8 20:01:05 2019
 # Imports
 # -----------------------------------------------------------------------------
 
+import nltk
+
 from sklearn.naive_bayes import MultinomialNB
 
 
@@ -37,6 +39,15 @@ class Naive_Bayes():
         :param y: training labels
         """
         self.clf.fit(X, y)
+        
+        
+    def fit_nltk(self, X):
+        """
+        Fit the model to the data using nltk.
+        
+        :param X:
+        """
+        self.clf_nltk = nltk.NaiveBayesClassifier.train(X)
     
     
     def predict(self, X):
@@ -47,3 +58,10 @@ class Naive_Bayes():
         :return:            labels for the data
         """
         return self.clf.predict(X)
+    
+    
+    def evaluate_nltk(self, X):
+        """
+        Evaluates the naive bayes classifier
+        """
+        return nltk.classify.accuracy(self.clf_nltk, X)
