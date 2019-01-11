@@ -11,6 +11,7 @@ Created on Tue Jan  8 10:47:08 2019
 # -----------------------------------------------------------------------------
 
 import time
+import pickle
 
 from hmm import HMM
 from crf import CRF
@@ -81,9 +82,17 @@ def main():
     
     # fit crf model
     # -------------------------------------------------------------------------
+    features_train = feature_maker.get_ner_features_crf(data_train)
+    features_test = feature_maker.get_ner_features_crf(data_test)
+    X, y = separate_labels_from_features(features_train)
+    X_test, y_test = separate_labels_from_features(features_test)
     crf = CRF()
-#    crf.fit()
-#    crf.evaluate()
+    crf.fit(X, y)
+    print("Done with CRF learning")
+    with open("crf_ner", 'wb') as f:
+        pickle.dump(crf, f)
+    
+    print(crf.evaluate(X_test, y_test))
 
 
 # execute main program

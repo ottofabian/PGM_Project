@@ -178,3 +178,69 @@ class Feature_Maker():
         return X_
 
     
+    def get_ner_features_crf(self, X):
+        """
+        Generate feature set for NER tagging
+        
+        @param X: list of tuples [(word1, postag1), (word2, postag2), ...]
+        @returns: dict of features
+        """
+        X_ = []
+        
+        for sent in X:   
+            sent_instances = []
+            for i, x in enumerate(sent):
+                word = x[0]
+                postag = x[1]
+            
+                instance = ({
+                    "bias": 1.0,
+                    "lowercasedword": word.lower(),
+                    "prefix1": word[0],
+                    "prefix2": word[:2],
+                    "prefix3": word[:3],
+                    "suffix1": word[-1],
+                    "suffix2": word[-2:],
+                    "suffix3": word[-3:],
+                    "isuppercase": word.isupper(),
+                    "istitle": word.istitle(),
+                    "isdigit": word.isdigit(),
+    #                "postag": postag,
+    #                "basepos": postag[:2],
+                    "shape": self._wordshape(word)
+                }, postag)
+                
+                if i > 0:
+                    word1 = sent[i-1][0]
+    #                postag1 = sent[i-1][1]
+                    instance[0].update({
+                        "-1:lowercasedword": word1.lower(),
+                        "-1:istitle": word1.istitle(),
+                        "-1:isuppercase": word1.isupper(),
+    #                    "-1:postag": postag1,
+    #                    "-1:basepos": postag1[:2],
+                        "-1:shape": self._wordshape(word1)
+                    })
+                else:
+                    instance[0]['BOS'] = True
+            
+                if i < len(sent) - 1:
+                    word1 = sent[i+1][0]
+    #                postag1 = sent[i+1][1]
+                    instance[0].update({
+                        "+1:lowercasedword": word1.lower(),
+                        "+1:istitle": word1.istitle(),
+                        "+1:isuppercase": word1.isupper(),
+    #                    "+1:postag": postag1,
+    #                    "+1:basepos": postag1[:2],
+                        "+1:shape": self._wordshape(word1)
+                    })
+                else:
+                    instance[0]["EOS"] = True
+                    
+                sent_instances.append(instance)
+                    
+            X_.append(sent_instances)
+                                                                            
+        return X_
+    

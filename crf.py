@@ -11,7 +11,7 @@ Created on Tue Jan  8 10:40:42 2019
 # -----------------------------------------------------------------------------
 
 import sklearn_crfsuite
-
+import sklearn_crfsuite.metrics as metrics
 
 # -----------------------------------------------------------------------------
 # Conditional Random Field
@@ -55,10 +55,14 @@ class CRF():
         return self.crf.predict(X)
     
     
-    def evaluate(self, X):
+    def evaluate(self, X, y):
         """
         Evaluates the trained crf model.
         
         :param X:
         """
-        pass
+        y_pred = self.crf.predict(X)
+        
+        return metrics.flat_f1_score(y, y_pred, average='weighted')
+    
+    
