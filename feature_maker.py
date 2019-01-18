@@ -13,6 +13,8 @@ Created on Tue Jan  8 20:45:57 2019
 import re
 import numpy as np
 
+from nltk.stem.snowball import SnowballStemmer
+
 from utils import flatten
 
 
@@ -29,7 +31,7 @@ class Feature_Maker():
         """
         Constructor.
         """
-        pass
+        self.stemmer = SnowballStemmer("english")
     
 
     def _wordshape(self, t):
@@ -63,6 +65,7 @@ class Feature_Maker():
             instance = ({
                 "word": word,
                 "lowercasedword": word.lower(),
+                "stem": self.stemmer.stem(word),
                 "prefix1": word[0],
                 "prefix2": word[:2],
                 "prefix3": word[:3],
@@ -97,6 +100,7 @@ class Feature_Maker():
             features = [
                 word,                                   # word
                 word.lower(),                           # lowercaseword
+                self.stemmer.stem(word),                # stem
                 word[0],                                # prefix1
                 word[:2],                               # prefix2
                 word[:3],                               # prefix3
@@ -118,11 +122,14 @@ class Feature_Maker():
         """
         Generate feature set for NER tagging
         
-        @param X: list of tuples [(w1, t1), (w2, t2), ...]
+        @param X: list of tuples [(w1, pos1, t1), (w2, pos2, t2), ...]
         @returns: dict of features
         """
         X_ = []
         X = flatten(X)
+        
+        if len(X[0]) < 3:
+            raise ValueError("Expected list of tuples in form [(w1, pos1, t1), (w2, pos2, t2), ...].")
         
         for i, x in enumerate(X):
             word = x[0]
@@ -131,6 +138,7 @@ class Feature_Maker():
             instance = ({
                 "bias": 1.0,
                 "lowercasedword": word.lower(),
+                "stem": self.stemmer.stem(word),
                 "prefix1": word[0],
                 "prefix2": word[:2],
                 "prefix3": word[:3],
@@ -140,20 +148,20 @@ class Feature_Maker():
                 "isuppercase": word.isupper(),
                 "istitle": word.istitle(),
                 "isdigit": word.isdigit(),
-#                "postag": postag,
-#                "basepos": postag[:2],
+                "postag": postag,
+                "basepos": postag[:2],
                 "shape": self._wordshape(word)
-            }, postag)
+            }, x[2])
             
             if i > 0:
                 word1 = X[i-1][0]
-#                postag1 = X[i-1][1]
+                postag1 = X[i-1][1]
                 instance[0].update({
                     "-1:lowercasedword": word1.lower(),
                     "-1:istitle": word1.istitle(),
                     "-1:isuppercase": word1.isupper(),
-#                    "-1:postag": postag1,
-#                    "-1:basepos": postag1[:2],
+                    "-1:postag": postag1,
+                    "-1:basepos": postag1[:2],
                     "-1:shape": self._wordshape(word1)
                 })
             else:
@@ -161,13 +169,13 @@ class Feature_Maker():
         
             if i < len(X) - 1:
                 word1 = X[i+1][0]
-#                postag1 = X[i+1][1]
+                postag1 = X[i+1][1]
                 instance[0].update({
                     "+1:lowercasedword": word1.lower(),
                     "+1:istitle": word1.istitle(),
                     "+1:isuppercase": word1.isupper(),
-#                    "+1:postag": postag1,
-#                    "+1:basepos": postag1[:2],
+                    "+1:postag": postag1,
+                    "+1:basepos": postag1[:2],
                     "+1:shape": self._wordshape(word1)
                 })
             else:
@@ -187,6 +195,9 @@ class Feature_Maker():
         """
         X_ = []
         
+        if len(X[0][0]) < 3:
+            raise ValueError("Expected list of tuples in form [(w1, pos1, t1), (w2, pos2, t2), ...].")
+        
         for sent in X:   
             sent_instances = []
             for i, x in enumerate(sent):
@@ -196,6 +207,7 @@ class Feature_Maker():
                 instance = ({
                     "bias": 1.0,
                     "lowercasedword": word.lower(),
+                    "stem": self.stemmer.stem(word),
                     "prefix1": word[0],
                     "prefix2": word[:2],
                     "prefix3": word[:3],
@@ -212,7 +224,7 @@ class Feature_Maker():
                     "postag": postag,
                     "basepos": postag[:2],
                     "shape": self._wordshape(word)
-                }, postag)
+                }, x[2])
                 
                 if i > 0:
                     word1 = sent[i-1][0]

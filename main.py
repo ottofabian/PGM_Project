@@ -44,8 +44,8 @@ def main():
     # split data into training and test set
     data_train, data_test = train_test_split(data, train_ratio=0.80)
     
-    data_train = data_train[:1000]
-    data_test = data_test[:1000]
+    data_train = data_train[:10]
+    data_test = data_test[:10]
     
     print(data_train)
     
@@ -80,7 +80,7 @@ def main():
     
     # evaluation naive bayes
     # -------------------------------------------------------------------------
-##    data_test_featurized = feature_maker.get_pos_features_nltk(data_test)
+#    data_test_featurized = feature_maker.get_pos_features_nltk(data_test)
 #    data_test_featurized = feature_maker.get_ner_features_nltk(data_test)
 #    print("Accuracy: ", nb.evaluate_nltk(data_test_featurized))
     # most informative features
