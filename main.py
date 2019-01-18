@@ -60,7 +60,7 @@ def main():
     # -------------------------------------------------------------------------
     # plot confusion matrix, calculate precision, recall, f1-score
     hmm.evaluate(data_test[:100])
-    hmm.evaluate_sentence(data_test[:100])
+    print("Sent Acc", hmm.evaluate_sentence(data_test[:100]))
     # show misclassifications
     
     features_test, labels_test = separate_labels_from_features(data_test)
