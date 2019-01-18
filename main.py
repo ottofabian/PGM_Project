@@ -36,7 +36,7 @@ def main():
     # load data and preprocessing
     if preprocessing:
         # usually not needed since txt file was created
-        data = preprocess_raw_data(max_=None, load_entities=load_entities)
+        data = preprocess_raw_data(max_=None, load_entities=load_entities, also_load_pos=True)
     else:
         path = "data_POS.txt" if not load_entities else "data_NER.txt"
         data = load_data_list(path)
@@ -44,8 +44,10 @@ def main():
     # split data into training and test set
     data_train, data_test = train_test_split(data, train_ratio=0.80)
     
-#    data_train = data_train[:10]
-#    data_test = data_test[:10]
+    data_train = data_train[:1000]
+    data_test = data_test[:1000]
+    
+    print(data_train)
     
     feature_maker = Feature_Maker()
 
@@ -81,7 +83,7 @@ def main():
 ##    data_test_featurized = feature_maker.get_pos_features_nltk(data_test)
 #    data_test_featurized = feature_maker.get_ner_features_nltk(data_test)
 #    print("Accuracy: ", nb.evaluate_nltk(data_test_featurized))
-#    # most informative features
+    # most informative features
 #    nb.clf_nltk.show_most_informative_features(50)
     
     # fit crf model

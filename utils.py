@@ -25,7 +25,7 @@ from random import shuffle
 # Util functions
 # -----------------------------------------------------------------------------
 
-def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
+def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True, also_load_pos=True):
     """
     Loads the data set.
 
@@ -36,6 +36,16 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
     """
     print("Loading data...")
     all_files = glob.glob(os.path.join(path, "*/*/en.tags"))
+    
+    usecols = [0]
+    if load_entities:
+        if also_load_pos:
+            usecols.append(1)
+            
+        usecols.append(3)
+        
+    else:
+        usecols.append(1)
 
     list_ = []
     all_files = all_files[:max_]
@@ -45,7 +55,7 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True):
         df = pd.read_csv(
             file_,
             index_col=None,
-            usecols=[0, 1 if not load_entities else 3],
+            usecols=usecols,
             header=None,
             sep="\t",
             skip_blank_lines=False,
@@ -151,6 +161,10 @@ def separate_labels_from_features(X):
         labels_sub = []
 
         # iterate over all words in the sentence
+        if len(sent) > 0:
+            if len(sent[0]) > 2:
+                sent = [(a[0], a[2]) for a in sent]
+        
         for (w, t) in sent:
             features_sub.append(w)
             labels_sub.append(t)
