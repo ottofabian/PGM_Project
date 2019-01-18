@@ -44,28 +44,28 @@ def main():
     # split data into training and test set
     data_train, data_test = train_test_split(data, train_ratio=0.80)
     
-    data_train = data_train[:10]
-    data_test = data_test[:10]
+#    data_train = data_train[:10]
+#    data_test = data_test[:10]
     
     feature_maker = Feature_Maker()
 
     # fit hidden markov model model
     # -------------------------------------------------------------------------
-    hmm = HMM()
-    start_time = time.time()
-    hmm.fit(data_train)
-    print(f"Duration of training: {time.time() - start_time}")
-
-    # evaluation hmm
-    # -------------------------------------------------------------------------
-    # plot confusion matrix, calculate precision, recall, f1-score
-    hmm.evaluate(data_test[:100])
-    print("Sent Acc", hmm.evaluate_sentence(data_test[:100]))
-    # show misclassifications
-    
-    features_test, labels_test = separate_labels_from_features(data_test)
-    predictions = hmm.predict(features_test)
-    show_misclassifications(data_test, predictions)
+#    hmm = HMM()
+#    start_time = time.time()
+#    hmm.fit(data_train)
+#    print(f"Duration of training: {time.time() - start_time}")
+#
+#    # evaluation hmm
+#    # -------------------------------------------------------------------------
+#    # plot confusion matrix, calculate precision, recall, f1-score
+#    hmm.evaluate(data_test[:100])
+#    print("Sent Acc", hmm.evaluate_sentence(data_test[:100]))
+#    # show misclassifications
+#    
+#    features_test, labels_test = separate_labels_from_features(data_test)
+#    predictions = hmm.predict(features_test)
+#    show_misclassifications(data_test, predictions)
     
     # fit naive bayes model
     # -------------------------------------------------------------------------
@@ -86,27 +86,27 @@ def main():
     
     # fit crf model
     # -------------------------------------------------------------------------
-#    features_train = feature_maker.get_ner_features_crf(data_train)
-#    features_test = feature_maker.get_ner_features_crf(data_test)
-#    X, y = separate_labels_from_features(features_train)
-#    X_test, y_test = separate_labels_from_features(features_test)
-#    
-#    crf = CRF()
-#    crf.fit(X, y)
-#    
-#    print("Done with CRF learning")
-#    with open("crf_ner", "wb") as f:
-#        pickle.dump(crf, f)
-#    
-#    print(crf.evaluate(X_test, y_test))
-#    
-#    crf.optimize_hyperparameters(X, y, plot=True)
-#    crf.most_informative_features(30)
-#    crf.least_informative_features(30)
-#    crf.likely_transitions()
-#    crf.unlikely_transitions()
-#    print("Sent Acc:", crf.evaluate_sentence(X, y))
-#    crf.classification_report(X, y)
+    features_train = feature_maker.get_ner_features_crf(data_train)
+    features_test = feature_maker.get_ner_features_crf(data_test)
+    X, y = separate_labels_from_features(features_train)
+    X_test, y_test = separate_labels_from_features(features_test)
+    
+    crf = CRF()
+    crf.fit(X, y)
+    
+    print("Done with CRF learning")
+    with open("crf_ner", "wb") as f:
+        pickle.dump(crf, f)
+    
+    print(crf.evaluate(X_test, y_test))
+    
+    crf.optimize_hyperparameters(X, y, plot=True)
+    crf.most_informative_features(30)
+    crf.least_informative_features(30)
+    crf.likely_transitions()
+    crf.unlikely_transitions()
+    print("Sent Acc:", crf.evaluate_sentence(X, y))
+    crf.classification_report(X, y)
 
 
 # execute main program
