@@ -44,6 +44,9 @@ def main():
     # split data into training and test set
     data_train, data_test = train_test_split(data, train_ratio=0.80)
     
+#    data_train = data_train[:10]
+#    data_test = data_test[:10]
+    
     feature_maker = Feature_Maker()
 
     # fit hidden markov model model
@@ -86,13 +89,23 @@ def main():
     features_test = feature_maker.get_ner_features_crf(data_test)
     X, y = separate_labels_from_features(features_train)
     X_test, y_test = separate_labels_from_features(features_test)
+    
     crf = CRF()
     crf.fit(X, y)
+    
     print("Done with CRF learning")
-    with open("crf_ner", 'wb') as f:
+    with open("crf_ner", "wb") as f:
         pickle.dump(crf, f)
     
     print(crf.evaluate(X_test, y_test))
+    
+#    crf.optimize_hyperparameters(X, y, plot=True)
+    crf.most_informative_features(30)
+    crf.least_informative_features(30)
+#    crf.likely_transitions()
+#    crf.unlikely_transitions()
+#    print("Sent Acc:", crf.evaluate_sentence(X, y))
+#    crf.classification_report(X, y)
 
 
 # execute main program

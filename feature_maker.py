@@ -118,7 +118,7 @@ class Feature_Maker():
         """
         Generate feature set for NER tagging
         
-        @param X: list of tuples [(word1, postag1), (word2, postag2), ...]
+        @param X: list of tuples [(w1, t1), (w2, t2), ...]
         @returns: dict of features
         """
         X_ = []
@@ -157,7 +157,7 @@ class Feature_Maker():
                     "-1:shape": self._wordshape(word1)
                 })
             else:
-                instance[0]['BOS'] = True
+                instance[0]["BOS"] = True
         
             if i < len(X) - 1:
                 word1 = X[i+1][0]
@@ -182,7 +182,7 @@ class Feature_Maker():
         """
         Generate feature set for NER tagging
         
-        @param X: list of tuples [(word1, postag1), (word2, postag2), ...]
+        @param X: list of tuples [(w1, t1), (w2, t2), ...]
         @returns: dict of features
         """
         X_ = []
@@ -202,6 +202,10 @@ class Feature_Maker():
                     "suffix1": word[-1],
                     "suffix2": word[-2:],
                     "suffix3": word[-3:],
+                    "isFirst": i == 0,
+                    "isLast": i == len(sent) - 1,
+                    "hasHyphen": "-" in word,
+                    "hasPeriod": "." in word,
                     "isuppercase": word.isupper(),
                     "istitle": word.istitle(),
                     "isdigit": word.isdigit(),
@@ -222,7 +226,7 @@ class Feature_Maker():
                         "-1:shape": self._wordshape(word1)
                     })
                 else:
-                    instance[0]['BOS'] = True
+                    instance[0]["BOS"] = True
             
                 if i < len(sent) - 1:
                     word1 = sent[i+1][0]
