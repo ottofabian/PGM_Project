@@ -115,7 +115,28 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
 
         plot_confusion_matrix(cfm, np.unique(labels))
         
-
+        
+    def evaluate_sentence(self, X):
+        """
+        Evaluates the trained hmm model on sentence level.
+        
+        :param X:   test data
+        :return:    evaluation result / accuracy
+        """
+        features, labels = separate_labels_from_features(X)
+        y = self.predict(features)
+        
+        correct_count = 0
+        num_sent = len(y)
+        
+        for i in range(len(labels)):
+            if labels[i] == y[i]:
+                correct_count = correct_count + 1
+                
+                
+        return correct_count / num_sent
+        
+        
     def train_supervised(self, labelled_sequences, estimator=None):
         """
         Trains model in supervised fashion.
