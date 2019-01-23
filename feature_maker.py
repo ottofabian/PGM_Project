@@ -180,62 +180,65 @@ class Feature_Maker():
         @returns: dict of features
         """
         X_ = []
-        X = flatten(X)
 
-        if len(X[0]) < 3:
+        if len(X[0][0]) < 3:
             raise ValueError("Expected list of tuples in form [(w1, pos1, t1), (w2, pos2, t2), ...].")
 
-        for i, x in enumerate(X):
-            word = x[0]
-            postag = x[1]
-
-            instance = ({
-                            "bias": 1.0,
-                            "lowercasedword": word.lower(),
-                            "stem": self.stemmer.stem(word),
-                            "prefix1": word[0],
-                            "prefix2": word[:2],
-                            "prefix3": word[:3],
-                            "suffix1": word[-1],
-                            "suffix2": word[-2:],
-                            "suffix3": word[-3:],
-                            "isuppercase": word.isupper(),
-                            "istitle": word.istitle(),
-                            "isdigit": word.isdigit(),
-                            "postag": postag,
-                            "basepos": postag[:2],
-                            "shape": self._wordshape(word)
-                        }, x[2])
-
-            if i > 0:
-                word1 = X[i - 1][0]
-                postag1 = X[i - 1][1]
-                instance[0].update({
-                    "-1:lowercasedword": word1.lower(),
-                    "-1:istitle": word1.istitle(),
-                    "-1:isuppercase": word1.isupper(),
-                    "-1:postag": postag1,
-                    "-1:basepos": postag1[:2],
-                    "-1:shape": self._wordshape(word1)
-                })
-            else:
-                instance[0]["BOS"] = True
-
-            if i < len(X) - 1:
-                word1 = X[i + 1][0]
-                postag1 = X[i + 1][1]
-                instance[0].update({
-                    "+1:lowercasedword": word1.lower(),
-                    "+1:istitle": word1.istitle(),
-                    "+1:isuppercase": word1.isupper(),
-                    "+1:postag": postag1,
-                    "+1:basepos": postag1[:2],
-                    "+1:shape": self._wordshape(word1)
-                })
-            else:
-                instance[0]["EOS"] = True
-
-            X_.append(instance)
+        for sent in X:
+            sent_instance = []
+            for i, x in enumerate(sent):
+                word = x[0]
+                postag = x[1]
+    
+                instance = ({
+                                "bias": 1.0,
+                                "lowercasedword": word.lower(),
+                                "stem": self.stemmer.stem(word),
+                                "prefix1": word[0],
+                                "prefix2": word[:2],
+                                "prefix3": word[:3],
+                                "suffix1": word[-1],
+                                "suffix2": word[-2:],
+                                "suffix3": word[-3:],
+                                "isuppercase": word.isupper(),
+                                "istitle": word.istitle(),
+                                "isdigit": word.isdigit(),
+                                "postag": postag,
+                                "basepos": postag[:2],
+                                "shape": self._wordshape(word)
+                            }, x[2])
+    
+                if i > 0:
+                    word1 = sent[i - 1][0]
+                    postag1 = sent[i - 1][1]
+                    instance[0].update({
+                        "-1:lowercasedword": word1.lower(),
+                        "-1:istitle": word1.istitle(),
+                        "-1:isuppercase": word1.isupper(),
+                        "-1:postag": postag1,
+                        "-1:basepos": postag1[:2],
+                        "-1:shape": self._wordshape(word1)
+                    })
+                else:
+                    instance[0]["BOS"] = True
+    
+                if i < len(sent) - 1:
+                    word1 = sent[i + 1][0]
+                    postag1 = sent[i + 1][1]
+                    instance[0].update({
+                        "+1:lowercasedword": word1.lower(),
+                        "+1:istitle": word1.istitle(),
+                        "+1:isuppercase": word1.isupper(),
+                        "+1:postag": postag1,
+                        "+1:basepos": postag1[:2],
+                        "+1:shape": self._wordshape(word1)
+                    })
+                else:
+                    instance[0]["EOS"] = True
+                    
+                sent_instance.append(instance)
+    
+            X_.append(sent_instance)
 
         return X_
 
