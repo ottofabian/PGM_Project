@@ -47,6 +47,9 @@ class CustomTagger(nltk.tag.HiddenMarkovModelTagger):
         :param unlabeled_sequence:
         :return:
         """
+        if not unlabeled_sequence:
+            return unlabeled_sequence, []
+        
         path = self._best_path(unlabeled_sequence)
         return unlabeled_sequence, path
 

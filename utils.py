@@ -59,7 +59,7 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True, 
             header=None,
             sep="\t",
             skip_blank_lines=False,
-            quotechar="\"",
+            quotechar='"',
             engine='python',
             doublequote=False,
             dtype={
@@ -72,6 +72,7 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True, 
         df.replace("\tLQU\t", '"', inplace=True)
         df.replace("\tRQU\t", '"', inplace=True)
         df.replace("[]", "QU" if not load_entities else "O", inplace=True)
+        df = df[~df[1].str.contains('-')] if not load_entities else df
         df.replace('None', np.nan, inplace=True)
 
         list_.append(df)
