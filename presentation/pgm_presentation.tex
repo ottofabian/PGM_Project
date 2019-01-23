@@ -1,0 +1,125 @@
+\input{preamble_theme}
+
+% Presentation data
+% ====================================================
+
+\title[PGM Project Presentation]{* * * PGM: Final Project Presentation * * * PoS-Tagging and NER}
+\institute{TU Darmstadt}
+\author{C. Biehl, F. Otto, D. Wehner}
+\date{\today}
+\prefix{PGM}
+
+% BEGIN OF DOCUMENT
+% ====================================================
+
+\begin{document}
+
+% Title frame
+%______________________________________________________________________
+\maketitlepage
+
+% Agenda
+%______________________________________________________________________
+\begin{frame}{Agenda}
+	\tableofcontents
+\end{frame}
+
+
+\section{Task Description}
+
+% The Task
+\begin{frame}{Task Description}{}
+	\divideTwo{0.59}{
+		\begin{itemize}
+			\item The task was to use probabilistic graphical models for:
+			\begin{itemize}
+				\item PoS-Tagging (Part-of-Speech Tagging)
+				\item Named Entity Recognition (NER)
+			\end{itemize}
+			\item We used the following models:
+			\begin{itemize}
+				\item Na\"{i}ve Bayes (baseline model)
+				\item HMMs (Hidden Markov models)
+				\item CRFs (Conditional Random Fields)
+			\end{itemize}
+		\end{itemize}
+	}{0.39}{
+		\begin{figure}
+			\fbox{\includegraphics[scale=0.05]{img/bayes_theorem}}
+		\end{figure}
+	}
+\end{frame}
+
+
+\section{Process and Tools}
+
+% Process and Tools
+\begin{frame}{Process and Tools}{}
+	\begin{figure}
+		\includegraphics[scale=0.4]{img/nlp_pipeline}
+	\end{figure}
+
+	\begin{itemize}
+		\item tbd...
+	\end{itemize}
+\end{frame}
+
+
+\section{Results and Comparison}
+
+% Results
+\begin{frame}{Results}{}
+	\divideTwo{0.49}{
+		\begin{table}[h]
+			\scalebox{0.8}{
+			\begin{tabular}{| c | c | c |}
+				\hline
+				\multicolumn{3}{| c |}{\textbf{Na\"{i}ve Bayes}}
+				\\ \hline\hline
+				\textbf{Features}		&	\textbf{F1-Score}		& 	\textbf{Accuracy}
+				\\ \hline\hline
+			\end{tabular}}
+		\end{table}
+	}{0.49}{
+		\begin{table}[h]
+			\scalebox{0.8}{
+			\begin{tabular}{| c | c | c |}
+				\hline
+				\multicolumn{3}{| c |}{\textbf{HMMs}}
+				\\ \hline\hline
+				\textbf{Features}		&	\textbf{F1-Score}		& 	\textbf{Accuracy}
+				\\ \hline\hline
+			\end{tabular}}
+		\end{table}
+	}
+\end{frame}
+
+
+% Results (Ctd.)
+\begin{frame}{Results (Ctd.)}{}
+	\begin{table}[h]
+		\scalebox{0.8}{
+		\begin{tabular}{| c | c | c |}
+			\hline
+			\multicolumn{3}{| c |}{\textbf{CRFs}}
+			\\ \hline\hline
+			\textbf{Features}		&	\textbf{F1-Score}		& 	\textbf{Accuracy}
+			\\ \hline\hline
+		\end{tabular}}
+	\end{table}
+\end{frame}
+
+
+% Comparison
+\begin{frame}{Result Comparison}{}
+	\begin{itemize}
+		\item tbd...
+	\end{itemize}
+\end{frame}
+
+
+% Thank you
+%______________________________________________________________________
+\makethanks
+
+\end{document}
