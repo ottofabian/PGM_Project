@@ -36,14 +36,14 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True, 
     """
     print("Loading data...")
     all_files = glob.glob(os.path.join(path, "*/*/en.tags"))
-    
+
     usecols = [0]
     if load_entities:
         if also_load_pos:
             usecols.append(1)
-            
+
         usecols.append(3)
-        
+
     else:
         usecols.append(1)
 
@@ -164,7 +164,7 @@ def separate_labels_from_features(X):
         if len(sent) > 0:
             if len(sent[0]) > 2:
                 sent = [(a[0], a[2]) for a in sent]
-        
+
         for (w, t) in sent:
             features_sub.append(w)
             labels_sub.append(t)
@@ -191,8 +191,8 @@ def show_misclassifications(gold_labels, pred_labels):
         if pred_labels[i] != gold_labels[i][1]:
             print(gold_labels[i][0], "\t",
                   pred_labels[i], "\t", gold_labels[i][1])
-            
-            
+
+
 def flatten(l):
     """
     Flattens a list.

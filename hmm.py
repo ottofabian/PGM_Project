@@ -39,7 +39,6 @@ class CustomTagger(nltk.tag.HiddenMarkovModelTagger):
         """
         # call super constructor
         super().__init__(symbols, states, transitions, outputs, priors)
-        
 
     def _tag(self, unlabeled_sequence):
         """
@@ -68,7 +67,6 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         super().__init__()
         self.trainer = hmm.HiddenMarkovModelTrainer()
         self.tagger = None
-        
 
     def fit(self, X):
         """
@@ -77,7 +75,6 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         :param X:           training data in the form: [[(w1, t1), (w2, t2), ...], [...], ...]
         """
         self.tagger = self.train_supervised(X)
-        
 
     def predict(self, X):
         """
@@ -93,7 +90,6 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
             prediction.append(y)
 
         return prediction
-    
 
     def evaluate(self, X):
         """
@@ -114,8 +110,7 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         cfm = sklearn.metrics.confusion_matrix(labels, y)
 
         plot_confusion_matrix(cfm, np.unique(labels))
-        
-        
+
     def evaluate_sentence(self, X):
         """
         Evaluates the trained hmm model on sentence level.
@@ -125,18 +120,16 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         """
         features, labels = separate_labels_from_features(X)
         y = self.predict(features)
-        
+
         correct_count = 0
         num_sent = len(y)
-        
+
         for i in range(len(labels)):
             if labels[i] == y[i]:
                 correct_count = correct_count + 1
-                
-                
+
         return correct_count / num_sent
-        
-        
+
     def train_supervised(self, labelled_sequences, estimator=None):
         """
         Trains model in supervised fashion.
@@ -147,7 +140,6 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         """
         tagger = super().train_supervised(labelled_sequences, estimator)
         return CustomTagger(self._symbols, self._states, tagger._transitions, tagger._outputs, tagger._priors)
-    
 
     def train_unsupervised(self, unlabeled_sequences, update_outputs=True, **kwargs):
         """
