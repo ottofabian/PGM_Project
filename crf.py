@@ -26,7 +26,7 @@ from collections import Counter
 # Conditional Random Field
 # -----------------------------------------------------------------------------
 
-class CRF():
+class CRF(object):
     """
     Conditional Random Field class.
     """

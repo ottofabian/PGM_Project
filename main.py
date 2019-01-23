@@ -29,12 +29,19 @@ preprocessing = False  # true: create txt file from data, false: load existing t
 load_entities = False  # true: ner, false: pos-tagging
 
 model_type = "NB"
+most_informative_features = 50
 
 
 def main():
     """
     Main function.
     """
+
+    global preprocessing
+    global load_entities
+    global model_type
+    global most_informative_features
+
     # load data and preprocessing
     if preprocessing:
         # usually not needed since txt file was created
@@ -64,8 +71,8 @@ def main():
         # evaluation hmm
         # -------------------------------------------------------------------------
         # plot confusion matrix, calculate precision, recall, f1-score
-        hmm.evaluate(data_test[:100])
-        print("Sent Acc", hmm.evaluate_sentence(data_test[:100]))
+        hmm.evaluate(data_test)
+        print("Sent Acc", hmm.evaluate_sentence(data_test))
         # show misclassifications
 
         features_test, labels_test = separate_labels_from_features(data_test)
@@ -76,26 +83,29 @@ def main():
         # fit naive bayes model
         # -------------------------------------------------------------------------
         nb = Naive_Bayes()
-        #    data_train_featurized = feature_maker.get_pos_features_nltk(data_train)
-        data_train_featurized = feature_maker.get_ner_features_nltk(data_train)
+        data_train_featurized = feature_maker.get_pos_features_nltk(
+            data_train) if not load_entities else feature_maker.get_ner_features_nltk(data_train)
         start_time = time.time()
         nb.fit_nltk(data_train_featurized)
         print(f"Duration of training: {time.time() - start_time}")
 
         # evaluation naive bayes
         # -------------------------------------------------------------------------
-        data_test_featurized = feature_maker.get_pos_features_nltk(data_test)
-        data_test_featurized = feature_maker.get_ner_features_nltk(data_test)
+        data_test_featurized = feature_maker.get_pos_features_nltk(
+            data_test) if not load_entities else feature_maker.get_ner_features_nltk(data_test)
         print("Accuracy: ", nb.evaluate_nltk(data_test_featurized))
         # most informative features
-        nb.clf_nltk.show_most_informative_features(50)
+        nb.clf_nltk.show_most_informative_features(most_informative_features)
 
     elif model_type == "CRF":
         # fit crf model
         # -------------------------------------------------------------------------
-        features_train = feature_maker.get_ner_features_crf(data_train)
-        features_test = feature_maker.get_ner_features_crf(data_test)
+        features_train = feature_maker.get_ner_features_crf(
+            data_train) if not load_entities else feature_maker.get_pos_features_crf(data_train)
+        features_test = feature_maker.get_ner_features_crf(
+            data_test) if not load_entities else feature_maker.get_pos_features_crf(data_test)
         X, y = separate_labels_from_features(features_train)
+
         X_test, y_test = separate_labels_from_features(features_test)
 
         crf = CRF()
@@ -108,8 +118,8 @@ def main():
         print(crf.evaluate(X_test, y_test))
 
         crf.optimize_hyperparameters(X, y, plot=True)
-        crf.most_informative_features(30)
-        crf.least_informative_features(30)
+        crf.most_informative_features(most_informative_features)
+        crf.least_informative_features(most_informative_features)
         crf.likely_transitions()
         crf.unlikely_transitions()
         print("Sent Acc:", crf.evaluate_sentence(X, y))
