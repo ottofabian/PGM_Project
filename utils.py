@@ -161,9 +161,9 @@ def separate_labels_from_features(X):
         labels_sub = []
 
         # iterate over all words in the sentence
-        if len(sent) > 0:
-            if len(sent[0]) > 2:
-                sent = [(a[0], a[2]) for a in sent]
+#        if len(sent) > 0:
+#            if len(sent[0]) > 2:
+#                sent = [(a[0], a[2]) for a in sent]
 
         for (w, t) in sent:
             features_sub.append(w)

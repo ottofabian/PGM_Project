@@ -75,7 +75,7 @@ class Feature_Maker():
             for i, x in enumerate(sent):
                 word = x[0]
                 postag = x[1]
-    
+
                 instance = ({
                                 "word": word,
                                 "lowercasedword": word.lower(),
@@ -91,9 +91,9 @@ class Feature_Maker():
                                 # "previousword": X[i - 1][0] if i > 1 else "<BEGIN>",
                                 # "nextword": X[i + 1][0] if i < len(X) - 1 else "<END>"
                             }, postag)
-    
+
                 sent_instances.append(instance)
-            
+
             X_.append(sent_instances)
 
         return X_
@@ -161,8 +161,8 @@ class Feature_Maker():
                     "suffix3": word[-3:],
                     "capitalization": word[0].isupper(),
                     "shape": self._wordshape(word),
-                    "previousword": X[i-1][0] if i > 1 else "<BEGIN>",
-                    "nextword": X[i+1][0] if i < len(X)-1 else "<END>"
+                    "previousword": sent[i-1][0] if i > 0 else "<BEGIN>",
+                    "nextword": sent[i+1][0] if i < len(sent)-1 else "<END>"
                 }, postag)
 
                 sent_instances.append(instance)

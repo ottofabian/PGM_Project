@@ -102,33 +102,34 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
 
         # get predictions for data
         y = self.predict(features)
-
-        labels = nltk.flatten(labels)
-        y = nltk.flatten(y)
-
-        print(sklearn.metrics.precision_recall_fscore_support(labels, y))
-        cfm = sklearn.metrics.confusion_matrix(labels, y)
-
-        plot_confusion_matrix(cfm, np.unique(labels))
-
-    def evaluate_sentence(self, X):
-        """
-        Evaluates the trained hmm model on sentence level.
         
-        :param X:   test data
-        :return:    evaluation result / accuracy
-        """
-        features, labels = separate_labels_from_features(X)
-        y = self.predict(features)
-
-        correct_count = 0
+        n_sent_correct = 0
         num_sent = len(y)
 
         for i in range(len(labels)):
             if labels[i] == y[i]:
-                correct_count = correct_count + 1
+                n_sent_correct += 1
 
-        return correct_count / num_sent
+        labels = nltk.flatten(labels)
+        y = nltk.flatten(y)
+        
+        print("F1 score:")
+        print(sklearn.metrics.precision_recall_fscore_support(labels, y, average='micro'))
+        print()
+        print("Accuracy:")
+        print(sklearn.metrics.accuracy_score(labels, y))
+        print()
+        print("Sentence level accuracy:")
+        print(n_sent_correct / num_sent)
+        print()
+        print("F1 score per class:")
+        print(sklearn.metrics.precision_recall_fscore_support(labels, y))
+        print()
+        print("Confusion matrix:")
+        cfm = sklearn.metrics.confusion_matrix(labels, y)
+
+        plot_confusion_matrix(cfm, np.unique(labels))
+
 
     def train_supervised(self, labelled_sequences, estimator=None):
         """

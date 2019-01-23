@@ -9,8 +9,10 @@ Created on Tue Jan  8 10:40:42 2019
 # -----------------------------------------------------------------------------
 # Imports
 # -----------------------------------------------------------------------------
-
+import sklearn
 import scipy
+
+import numpy as np
 import sklearn_crfsuite
 import sklearn_crfsuite.metrics as metrics
 
@@ -21,10 +23,13 @@ from sklearn.model_selection import RandomizedSearchCV
 
 from collections import Counter
 
+from utils import flatten
 
 # -----------------------------------------------------------------------------
 # Conditional Random Field
 # -----------------------------------------------------------------------------
+from utils import plot_confusion_matrix
+
 
 class CRF(object):
     """
@@ -61,17 +66,47 @@ class CRF(object):
         """
         return self.crf.predict(X)
 
-    def evaluate(self, X, y):
+    def evaluate(self, X, y_):
         """
         Evaluates the trained crf model.
         
-        :param X:   test data
+        :param X:   test data: [[(word, pos), (word, pos)], [...]]
         :param y:   test labels
         :return:    evaluation result
         """
-        y_pred = self.crf.predict(X)
+        y = self.crf.predict(X)
+        
+        n_sent_correct = 0
+        num_sent = len(X)
 
-        return metrics.flat_f1_score(y, y_pred, average="weighted")
+        for i in range(num_sent):
+            sentence_correct = True
+            for j in range(len(y_[i])):
+                if y_[i][j] != y[i][j]:
+                    sentence_correct = False
+                    
+            if sentence_correct == True:
+                n_sent_correct += 1 
+
+        labels = flatten(y_)
+        y = flatten(y)
+        
+        print("F1 score:")
+        print(sklearn.metrics.precision_recall_fscore_support(labels, y, average='micro'))
+        print()
+        print("Accuracy:")
+        print(sklearn.metrics.accuracy_score(labels, y))
+        print()
+        print("Sentence level accuracy:")
+        print(n_sent_correct / num_sent)
+        print()
+        print("F1 score per class:")
+        print(sklearn.metrics.precision_recall_fscore_support(labels, y))
+        print()
+        print("Confusion matrix:")
+        cfm = sklearn.metrics.confusion_matrix(labels, y)
+
+        plot_confusion_matrix(cfm, np.unique(labels))
 
     def evaluate_sentence(self, X, y):
         """

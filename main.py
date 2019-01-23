@@ -17,7 +17,7 @@ from hmm import HMM
 from crf import CRF
 from naive_bayes import Naive_Bayes
 from feature_maker import Feature_Maker
-from utils import preprocess_raw_data, load_data_list, \
+from utils import preprocess_raw_data, load_data_list, flatten, \
     train_test_split, show_misclassifications, separate_labels_from_features
 
 # -----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ from utils import preprocess_raw_data, load_data_list, \
 preprocessing = False  # true: create txt file from data, false: load existing txt file with preprocessed data
 load_entities = False  # true: ner, false: pos-tagging
 
-model_type = "NB"
+model_type = "CRF"
 most_informative_features = 50
 
 
@@ -72,9 +72,7 @@ def main():
         # -------------------------------------------------------------------------
         # plot confusion matrix, calculate precision, recall, f1-score
         hmm.evaluate(data_test)
-        print("Sent Acc", hmm.evaluate_sentence(data_test))
         # show misclassifications
-
         features_test, labels_test = separate_labels_from_features(data_test)
         predictions = hmm.predict(features_test)
         show_misclassifications(data_test, predictions)
@@ -85,6 +83,8 @@ def main():
         nb = Naive_Bayes()
         data_train_featurized = feature_maker.get_pos_features_nltk(
             data_train) if not load_entities else feature_maker.get_ner_features_nltk(data_train)
+        
+        data_train_featurized = flatten(data_train_featurized)
         start_time = time.time()
         nb.fit_nltk(data_train_featurized)
         print(f"Duration of training: {time.time() - start_time}")
@@ -93,17 +93,19 @@ def main():
         # -------------------------------------------------------------------------
         data_test_featurized = feature_maker.get_pos_features_nltk(
             data_test) if not load_entities else feature_maker.get_ner_features_nltk(data_test)
-        print("Accuracy: ", nb.evaluate_nltk(data_test_featurized))
+        
+        nb.evaluate_nltk(data_test_featurized)
+        print()
         # most informative features
         nb.clf_nltk.show_most_informative_features(most_informative_features)
 
     elif model_type == "CRF":
         # fit crf model
         # -------------------------------------------------------------------------
-        features_train = feature_maker.get_ner_features_crf(
-            data_train) if not load_entities else feature_maker.get_pos_features_crf(data_train)
-        features_test = feature_maker.get_ner_features_crf(
-            data_test) if not load_entities else feature_maker.get_pos_features_crf(data_test)
+        features_train = feature_maker.get_pos_features_crf(
+            data_train) if not load_entities else feature_maker.get_ner_features_crf(data_train)
+        features_test = feature_maker.get_pos_features_crf(
+            data_test) if not load_entities else feature_maker.get_ner_features_crf(data_test)
         X, y = separate_labels_from_features(features_train)
 
         X_test, y_test = separate_labels_from_features(features_test)
