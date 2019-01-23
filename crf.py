@@ -9,8 +9,9 @@ Created on Tue Jan  8 10:40:42 2019
 # -----------------------------------------------------------------------------
 # Imports
 # -----------------------------------------------------------------------------
+import sklearn
 
-import scipy
+import numpy as np
 import sklearn_crfsuite
 import sklearn_crfsuite.metrics as metrics
 
@@ -21,10 +22,11 @@ from sklearn.model_selection import RandomizedSearchCV
 
 from collections import Counter
 
-
 # -----------------------------------------------------------------------------
 # Conditional Random Field
 # -----------------------------------------------------------------------------
+from utils import plot_confusion_matrix
+
 
 class CRF(object):
     """
@@ -71,7 +73,13 @@ class CRF(object):
         """
         y_pred = self.crf.predict(X)
 
-        return metrics.flat_f1_score(y, y_pred, average="weighted")
+        print(sklearn.metrics.accuracy_score(y, y_pred))
+        print(sklearn.metrics.precision_recall_fscore_support(y, y_pred))
+        cfm = sklearn.metrics.confusion_matrix(y, y_pred)
+
+        plot_confusion_matrix(cfm, np.unique(y))
+
+        print(metrics.flat_f1_score(y, y_pred, average="weighted"))
 
     def evaluate_sentence(self, X, y):
         """

@@ -107,6 +107,7 @@ class HMM(nltk.tag.HiddenMarkovModelTrainer):
         y = nltk.flatten(y)
 
         print(sklearn.metrics.precision_recall_fscore_support(labels, y))
+        print(sklearn.metrics.accuracy_score(labels, y))
         cfm = sklearn.metrics.confusion_matrix(labels, y)
 
         plot_confusion_matrix(cfm, np.unique(labels))
