@@ -26,9 +26,9 @@ from utils import preprocess_raw_data, load_data_list, flatten, \
 
 # global variables
 preprocessing = False  # true: create txt file from data, false: load existing txt file with preprocessed data
-load_entities = True  # true: ner, false: pos-tagging
+load_entities = True   # true: ner, false: pos-tagging
 
-model_type = "HMM"
+model_type = "NB"
 most_informative_features = 50
 
 
@@ -63,6 +63,10 @@ def main():
     if model_type == "HMM":
         # fit hidden markov model model
         # -------------------------------------------------------------------------
+        if load_entities is True:
+            data_train = [[(t[0], t[2]) for t in sent] for sent in data_train]
+            data_test = [[(t[0], t[2]) for t in sent] for sent in data_test]
+        
         hmm = HMM()
         start_time = time.time()
         hmm.fit(data_train)
@@ -73,8 +77,8 @@ def main():
         # plot confusion matrix, calculate precision, recall, f1-score
         hmm.evaluate(data_test)
         # show misclassifications
-        features_test, labels_test = separate_labels_from_features(data_test)
-        predictions = hmm.predict(features_test)
+        #features_test, labels_test = separate_labels_from_features(data_test)
+        #predictions = hmm.predict(features_test)
         #print("GET READY FOR SPAM!!!")
         #show_misclassifications(data_test, predictions)
 

@@ -47,39 +47,55 @@ def preprocess_raw_data(path="./gmb-2.2.0/data", max_=None, load_entities=True, 
     else:
         usecols.append(1)
 
-    list_ = []
+#    list_ = []
+    data = []
     all_files = all_files[:max_]
 
     for file_ in all_files:
         print(file_)
-        df = pd.read_csv(
-            file_,
-            index_col=None,
-            usecols=usecols,
-            header=None,
-            sep="\t",
-            skip_blank_lines=False,
-            quotechar='"',
-            engine='python',
-            doublequote=False,
-            dtype={
-                0: str,
-                1: str,
-                # 3: str
-            })
+        
+        read = []
+        
+        with open(file_, 'r', encoding="utf8") as f:
+            sent = []
+            for line in f:
+                if not line or line.strip() == "":
+                    read.append(sent)
+                    sent = []
+                else:
+                    splitline = line.split('\t')
+                    sent.append([splitline[0], splitline[1], splitline[3]])
+                
+        data.extend(read)
+                
+#        df = pd.read_csv(
+#            file_,
+#            index_col=None,
+#            usecols=usecols,
+#            header=None,
+#            sep="\t",
+#            skip_blank_lines=False,
+#            quotechar="\"",
+#            engine='python',
+#            doublequote=False,
+#            dtype={
+#                0: str,
+#                1: str,
+#                # 3: str
+#            })
+#
+#        # replace quotations with single label
+#        df.replace("\tLQU\t", '"', inplace=True)
+#        df.replace("\tRQU\t", '"', inplace=True)
+#        df.replace("[]", "QU" if not load_entities else "O", inplace=True)
+#        df = df[~df[1].str.contains('-')] if not load_entities else df
+#        df.replace('None', np.nan, inplace=True)
 
-        # replace quotations with single label
-        df.replace("\tLQU\t", '"', inplace=True)
-        df.replace("\tRQU\t", '"', inplace=True)
-        df.replace("[]", "QU" if not load_entities else "O", inplace=True)
-        df = df[~df[1].str.contains('-')] if not load_entities else df
-        df.replace('None', np.nan, inplace=True)
+#        list_.append(df)
 
-        list_.append(df)
-
-    frame = pd.concat(list_, axis=0, ignore_index=True)
-    mask = pd.isna(frame[0])
-    data = split(frame, mask)
+#    frame = pd.concat(list_, axis=0, ignore_index=True)
+#    mask = pd.isna(frame[0])
+#    data = split(frame, mask)
 
     path = "data_POS.txt" if not load_entities else "data_NER.txt"
     save_data_list(data, path)
