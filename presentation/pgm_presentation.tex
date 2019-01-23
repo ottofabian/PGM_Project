@@ -68,26 +68,81 @@
 \section{Results and Comparison}
 
 % Results
-\begin{frame}{Results}{}
+\begin{frame}{Results}{POS Tagging}
 	\divideTwo{0.49}{
 		\begin{table}[h]
-			\scalebox{0.8}{
-			\begin{tabular}{| c | c | c |}
+			\scalebox{0.6}{
+			\begin{tabular}{| c | c | c | c |}
 				\hline
-				\multicolumn{3}{| c |}{\textbf{Na\"{i}ve Bayes}}
+				\multicolumn{4}{| c |}{\textbf{Na\"{i}ve Bayes} [POS]}
 				\\ \hline\hline
-				\textbf{Features}		&	\textbf{F1-Score}		& 	\textbf{Accuracy}
+				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc word}	& 	\textbf{Acc sent}
 				\\ \hline\hline
+				w, l, s 				& 						& 						&
+				\\ \hline
+				*					&						&						&
+				\\ \hline
 			\end{tabular}}
 		\end{table}
 	}{0.49}{
 		\begin{table}[h]
-			\scalebox{0.8}{
-			\begin{tabular}{| c | c | c |}
+			\scalebox{0.6}{
+			\begin{tabular}{| c | c | c | c |}
 				\hline
-				\multicolumn{3}{| c |}{\textbf{HMMs}}
+				\multicolumn{4}{| c |}{\textbf{HMM} [POS]}
 				\\ \hline\hline
-				\textbf{Features}		&	\textbf{F1-Score}		& 	\textbf{Accuracy}
+				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc word}	& 	\textbf{Acc sent}
+				\\ \hline\hline
+			\end{tabular}}
+		\end{table}
+	}
+	\tiny \textbf{Legend:} \\
+	\textbf{w}: word, \textbf{l}: lowercase word, \textbf{s}: stem, \textbf{p1}: prefix1, \textbf{p2}: prefix2,
+	\textbf{p3}: prefix3, \textbf{s1}: suffix1, \textbf{s2}: suffix2, \textbf{s3}: suffix3, \textbf{c}: capitalization, \\
+	\textbf{sh}: shape, \textbf{pw}: previous word, \textbf{nw}: next word, \textbf{*}: all features
+\end{frame}
+
+
+% Results (Ctd.)
+\begin{frame}{Results (Ctd.)}{POS Tagging}
+	\begin{table}[h]
+		\scalebox{0.8}{
+		\begin{tabular}{| c | c | c | c |}
+			\hline
+			\multicolumn{4}{| c |}{\textbf{CRF} [POS]}
+			\\ \hline\hline
+			\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc word}	& 	\textbf{Acc sent}
+			\\ \hline\hline
+			* 					& 	0.985 				& 	0.985				& 	0.719
+			\\ \hline
+		\end{tabular}}
+	\end{table}
+\end{frame}
+
+
+% Results (Ctd.)
+\begin{frame}{Results (Ctd.)}{Named Entity Recognition}
+	\divideTwo{0.49}{
+		\begin{table}[h]
+			\scalebox{0.6}{
+			\begin{tabular}{| c | c | c | c |}
+				\hline
+				\multicolumn{4}{| c |}{\textbf{Na\"{i}ve Bayes} [NER]}
+				\\ \hline\hline
+				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc word}	& 	\textbf{Acc sent}
+				\\ \hline\hline
+				w, l, s 				& 						& 						&
+				\\ \hline
+			\end{tabular}}
+		\end{table}
+	}{0.49}{
+		\begin{table}[h]
+			\scalebox{0.6}{
+			\begin{tabular}{| c | c | c | c |}
+				\hline
+				\multicolumn{4}{| c |}{\textbf{HMM} [NER]}
+				\\ \hline\hline
+				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc word}	& 	\textbf{Acc sent}
 				\\ \hline\hline
 			\end{tabular}}
 		\end{table}
@@ -96,14 +151,14 @@
 
 
 % Results (Ctd.)
-\begin{frame}{Results (Ctd.)}{}
+\begin{frame}{Results (Ctd.)}{Named Entity Recognition}
 	\begin{table}[h]
 		\scalebox{0.8}{
-		\begin{tabular}{| c | c | c |}
+		\begin{tabular}{| c | c | c | c |}
 			\hline
-			\multicolumn{3}{| c |}{\textbf{CRFs}}
+			\multicolumn{4}{| c |}{\textbf{CRF} [NER]}
 			\\ \hline\hline
-			\textbf{Features}		&	\textbf{F1-Score}		& 	\textbf{Accuracy}
+			\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc word}	& 	\textbf{Acc sent}
 			\\ \hline\hline
 		\end{tabular}}
 	\end{table}
