@@ -48,6 +48,20 @@ class Feature_Maker():
         return re.sub("[0-9]", "d", t)
     
     
+    def _wordshape_short(self, t):
+        """
+        Convert token to short shape string
+        E.g. 35-Year -> d-Xx
+        
+        :param t:       input token
+        :return:        shape string
+        """
+        t = re.sub("[A-Z]+", "X", t)
+        t = re.sub("[a-z]+", "x", t)
+        
+        return re.sub("[0-9]+", "d", t)
+    
+    
     def get_pos_features_nltk(self, X):
         """
         Generate feature set for POS tagging
@@ -116,6 +130,44 @@ class Feature_Maker():
             y_.append(postag)
             
         return np.asarray(X_), np.asarray(y_)
+    
+    
+    def get_pos_features_crf(self, X):
+        """
+        Generate feature set for POS tagging
+        
+        :param X:       list of tuples [(w1, t1), (w2, t2), ...]
+        :return:        dict of features
+        """
+        X_ = []
+        
+        for sent in X:   
+            sent_instances = []
+            for i, x in enumerate(sent):
+                word = x[0]
+                postag = x[1]
+                
+                instance = ({
+                    "word": word,
+                    "lowercasedword": word.lower(),
+                    "stem": self.stemmer.stem(word),
+                    "prefix1": word[0],
+                    "prefix2": word[:2],
+                    "prefix3": word[:3],
+                    "suffix1": word[-1],
+                    "suffix2": word[-2:],
+                    "suffix3": word[-3:],
+                    "capitalization": word[0].isupper(),
+                    "shape": self._wordshape(word),
+                    "previousword": X[i-1][0] if i > 1 else "<BEGIN>",
+                    "nextword": X[i+1][0] if i < len(X)-1 else "<END>"
+                }, postag)
+    
+                sent_instances.append(instance)
+            
+            X_.append(sent_instances)
+            
+        return X_
     
     
     def get_ner_features_nltk(self, X):
