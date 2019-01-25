@@ -233,6 +233,7 @@ def plot_confusion_matrix(cm, classes, title="Confusion matrix", cmap=plt.cm.Blu
 
     # normalize confusion matrix
     cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
+    cm[np.isnan(cm)] = 0.00
 
     # plot confusion matrix
     plt.imshow(cm, interpolation="nearest", cmap=cmap)

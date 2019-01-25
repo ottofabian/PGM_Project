@@ -89,3 +89,7 @@ class Naive_Bayes(object):
 
         plot_confusion_matrix(cfm, np.unique(y_))
         
+        print(np.unique(y_))
+        print()
+        print(print(np.unique(y)))
+        

@@ -192,6 +192,7 @@ class Feature_Maker():
     
                 instance = ({
                                 "bias": 1.0,
+                                "word": word,
                                 "lowercasedword": word.lower(),
                                 "stem": self.stemmer.stem(word),
                                 "prefix1": word[0],
@@ -262,6 +263,7 @@ class Feature_Maker():
 
                 instance = ({
                                 "bias": 1.0,
+                                "word": word,
                                 "lowercasedword": word.lower(),
                                 "stem": self.stemmer.stem(word),
                                 "prefix1": word[0],

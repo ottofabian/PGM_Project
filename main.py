@@ -32,107 +32,107 @@ model_type = "NB"
 most_informative_features = 50
 
 
-def main():
-    """
-    Main function.
-    """
+#def main():
+#    """
+#    Main function.
+#    """
 
-    global preprocessing
-    global load_entities
-    global model_type
-    global most_informative_features
+#global preprocessing
+#global load_entities
+#global model_type
+#global most_informative_features
 
-    # load data and preprocessing
-    if preprocessing:
-        # usually not needed since txt file was created
-        data = preprocess_raw_data(max_=None, load_entities=load_entities, also_load_pos=True)
-    else:
-        path = "data_POS.txt" if not load_entities else "data_NER.txt"
-        data = load_data_list(path)
+# load data and preprocessing
+if preprocessing:
+    # usually not needed since txt file was created
+    data = preprocess_raw_data(max_=None, load_entities=load_entities, also_load_pos=True)
+else:
+    path = "data_POS.txt" if not load_entities else "data_NER.txt"
+    data = load_data_list(path)
 
-    # split data into training and test set
-    data_train, data_test = train_test_split(data, train_ratio=0.80)
+# split data into training and test set
+data_train, data_test = train_test_split(data, train_ratio=0.80)
 
-    data_train = data_train
-    data_test = data_test
+data_train = data_train
+data_test = data_test
 
-    # print(data_train)
+# print(data_train)
 
-    feature_maker = Feature_Maker()
+feature_maker = Feature_Maker()
 
-    if model_type == "HMM":
-        # fit hidden markov model model
-        # -------------------------------------------------------------------------
-        if load_entities is True:
-            data_train = [[(t[0], t[2]) for t in sent] for sent in data_train]
-            data_test = [[(t[0], t[2]) for t in sent] for sent in data_test]
-        
-        hmm = HMM()
-        start_time = time.time()
-        hmm.fit(data_train)
-        print(f"Duration of training: {time.time() - start_time}")
+if model_type == "HMM":
+    # fit hidden markov model model
+    # -------------------------------------------------------------------------
+    if load_entities is True:
+        data_train = [[(t[0], t[2]) for t in sent] for sent in data_train]
+        data_test = [[(t[0], t[2]) for t in sent] for sent in data_test]
+    
+    hmm = HMM()
+    start_time = time.time()
+    hmm.fit(data_train)
+    print(f"Duration of training: {time.time() - start_time}")
 
-        # evaluation hmm
-        # -------------------------------------------------------------------------
-        # plot confusion matrix, calculate precision, recall, f1-score
-        hmm.evaluate(data_test)
-        # show misclassifications
-        #features_test, labels_test = separate_labels_from_features(data_test)
-        #predictions = hmm.predict(features_test)
-        #print("GET READY FOR SPAM!!!")
-        #show_misclassifications(data_test, predictions)
+    # evaluation hmm
+    # -------------------------------------------------------------------------
+    # plot confusion matrix, calculate precision, recall, f1-score
+    hmm.evaluate(data_test)
+    # show misclassifications
+    #features_test, labels_test = separate_labels_from_features(data_test)
+    #predictions = hmm.predict(features_test)
+    #print("GET READY FOR SPAM!!!")
+    #show_misclassifications(data_test, predictions)
 
-    elif model_type == "NB":
-        # fit naive bayes model
-        # -------------------------------------------------------------------------
-        nb = Naive_Bayes()
-        data_train_featurized = feature_maker.get_pos_features_nltk(
-            data_train) if not load_entities else feature_maker.get_ner_features_nltk(data_train)
-        
-        data_train_featurized = flatten(data_train_featurized)
-        start_time = time.time()
-        nb.fit_nltk(data_train_featurized)
-        print(f"Duration of training: {time.time() - start_time}")
+elif model_type == "NB":
+    # fit naive bayes model
+    # -------------------------------------------------------------------------
+    nb = Naive_Bayes()
+    data_train_featurized = feature_maker.get_pos_features_nltk(
+        data_train) if not load_entities else feature_maker.get_ner_features_nltk(data_train)
+    
+    data_train_featurized = flatten(data_train_featurized)
+    start_time = time.time()
+    nb.fit_nltk(data_train_featurized)
+    print(f"Duration of training: {time.time() - start_time}")
 
-        # evaluation naive bayes
-        # -------------------------------------------------------------------------
-        data_test_featurized = feature_maker.get_pos_features_nltk(
-            data_test) if not load_entities else feature_maker.get_ner_features_nltk(data_test)
-        
-        nb.evaluate_nltk(data_test_featurized)
-        print()
-        # most informative features
-        nb.clf_nltk.show_most_informative_features(most_informative_features)
+    # evaluation naive bayes
+    # -------------------------------------------------------------------------
+    data_test_featurized = feature_maker.get_pos_features_nltk(
+        data_test) if not load_entities else feature_maker.get_ner_features_nltk(data_test)
+    
+    nb.evaluate_nltk(data_test_featurized)
+    print()
+    # most informative features
+    nb.clf_nltk.show_most_informative_features(most_informative_features)
 
-    elif model_type == "CRF":
-        # fit crf model
-        # -------------------------------------------------------------------------
-        features_train = feature_maker.get_pos_features_crf(
-            data_train) if not load_entities else feature_maker.get_ner_features_crf(data_train)
-        features_test = feature_maker.get_pos_features_crf(
-            data_test) if not load_entities else feature_maker.get_ner_features_crf(data_test)
-        X, y = separate_labels_from_features(features_train)
+elif model_type == "CRF":
+    # fit crf model
+    # -------------------------------------------------------------------------
+    features_train = feature_maker.get_pos_features_crf(
+        data_train) if not load_entities else feature_maker.get_ner_features_crf(data_train)
+    features_test = feature_maker.get_pos_features_crf(
+        data_test) if not load_entities else feature_maker.get_ner_features_crf(data_test)
+    X, y = separate_labels_from_features(features_train)
 
-        X_test, y_test = separate_labels_from_features(features_test)
+    X_test, y_test = separate_labels_from_features(features_test)
 
-        crf = CRF()
-        crf.fit(X, y)
+    crf = CRF()
+    crf.fit(X, y)
 
-        print("Done with CRF learning")
-        with open("crf_ner", "wb") as f:
-            pickle.dump(crf, f)
+    print("Done with CRF learning")
+    with open("crf_ner", "wb") as f:
+        pickle.dump(crf, f)
 
-        print(crf.evaluate(X_test, y_test))
+    print(crf.evaluate(X_test, y_test))
 
-        crf.optimize_hyperparameters(X, y, plot=True)
-        crf.most_informative_features(most_informative_features)
-        crf.least_informative_features(most_informative_features)
-        crf.likely_transitions()
-        crf.unlikely_transitions()
-        print("Sent Acc:", crf.evaluate_sentence(X, y))
-        crf.classification_report(X, y)
+    crf.optimize_hyperparameters(X, y, plot=True)
+    crf.most_informative_features(most_informative_features)
+    crf.least_informative_features(most_informative_features)
+    crf.likely_transitions()
+    crf.unlikely_transitions()
+    print("Sent Acc:", crf.evaluate_sentence(X, y))
+    crf.classification_report(X, y)
 
 
-# execute main program
-if __name__ == "__main__":
-    main()
+## execute main program
+#if __name__ == "__main__":
+#    main()
