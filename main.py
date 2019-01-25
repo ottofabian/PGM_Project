@@ -26,7 +26,7 @@ from utils import preprocess_raw_data, load_data_list, flatten, \
 
 # global variables
 preprocessing = False  # true: create txt file from data, false: load existing txt file with preprocessed data
-load_entities = True   # true: ner, false: pos-tagging
+load_entities = False  # true: ner, false: pos-tagging
 
 model_type = "NB"
 most_informative_features = 50
@@ -66,6 +66,9 @@ if model_type == "HMM":
     if load_entities is True:
         data_train = [[(t[0], t[2]) for t in sent] for sent in data_train]
         data_test = [[(t[0], t[2]) for t in sent] for sent in data_test]
+    else:
+        data_train = [[(t[0], t[1]) for t in sent] for sent in data_train]
+        data_test = [[(t[0], t[1]) for t in sent] for sent in data_test]
     
     hmm = HMM()
     start_time = time.time()

@@ -80,16 +80,16 @@ class Feature_Maker():
                                 "word": word,
                                 "lowercasedword": word.lower(),
                                 "stem": self.stemmer.stem(word),
-                                # "prefix1": word[0],
-                                # "prefix2": word[:2],
-                                # "prefix3": word[:3],
-                                # "suffix1": word[-1],
-                                # "suffix2": word[-2:],
-                                # "suffix3": word[-3:],
-                                # "capitalization": word[0].isupper(),
-                                # "shape": self._wordshape(word),
-                                # "previousword": X[i - 1][0] if i > 1 else "<BEGIN>",
-                                # "nextword": X[i + 1][0] if i < len(X) - 1 else "<END>"
+#                                 "prefix1": word[0],
+#                                 "prefix2": word[:2],
+#                                 "prefix3": word[:3],
+#                                 "suffix1": word[-1],
+#                                 "suffix2": word[-2:],
+#                                 "suffix3": word[-3:],
+#                                 "capitalization": word[0].isupper(),
+#                                 "shape": self._wordshape(word)
+                                 "previousword": sent[i - 1][0] if i > 1 else "<BEGIN>",
+                                 "nextword": sent[i + 1][0] if i < len(sent) - 1 else "<END>"
                             }, postag)
 
                 sent_instances.append(instance)
