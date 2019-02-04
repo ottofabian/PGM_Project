@@ -18,7 +18,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import random
 from random import shuffle
+
+# LE SEED
+random.seed(42)
 
 
 # -----------------------------------------------------------------------------
