@@ -152,7 +152,6 @@ elif model_type == "CRF":
     crf.least_informative_features(most_informative_features)
     crf.likely_transitions()
     crf.unlikely_transitions()
-    print("Sent Acc:", crf.evaluate_sentence(X, y))
     crf.classification_report(X, y)
 
 
