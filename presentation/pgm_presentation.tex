@@ -85,6 +85,20 @@
 \end{frame}
 
 
+% Data Set
+\begin{frame}{Data Set}{}
+	\begin{itemize}
+		\item We used the \textbf{Groningen Meaning Bank}
+		\item \url{http://gmb.let.rug.nl/data.php}
+		\item Corpus of public domain texts:
+		\begin{itemize}
+			\item 1.4 milion words
+			\item automatically produced, manually corrected (silver labels)
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+
 \section{Results and Comparison}
 
 % Results
@@ -138,11 +152,11 @@
 			\\ \hline\hline
 			\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc (w / s)}
 			\\ \hline\hline
-			w, l, s 				& 						& 	
+			w, l, s 				& 	0.974				&  	0.974 / 0.607	
 			\\ \hline
 			w, l, s, uwf				&	0.980				&	0.980 / 0.749
 			\\ \hline
-			w, l, s, bf 				& 			 			&	
+			w, l, s, bf 				& 	0.978		 		&	0.978 / 0.669
 			\\ \hline
 			w, l, s, uwf, bf			& 	0.985 				& 	0.985 / 0.740
 			\\ \hline
@@ -154,8 +168,8 @@
 \end{frame}
 
 
-% Confusion Matrix CRF (all features)
-\begin{frame}{Confusion Matrix CRF (all features)}{}
+% POS: Confusion Matrix CRF (all features)
+\begin{frame}{POS: Confusion Matrix CRF (all features)}{}
 	\begin{figure}
 		\includegraphics[scale=0.08]{img/cm_pos}
 		\caption{Named entity recognition}
@@ -214,19 +228,28 @@
 			\\ \hline\hline
 			\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Accuracy (w / s)}
 			\\ \hline\hline
-			w, l, s	 			& 	0.974				&	0.974 / 0.694
+			w, l, s	 			& 	0.965				&	0.965 / 0.604
 			\\ \hline
-			w, l, s, uwf 			& 	0.974				& 	0.974 / 0.694
+			w, l, s, uwf 			& 	0.969				&  	0.969 / 0.639	
 			\\ \hline
-			w, l, s, uwf, pos			& 						&
+			w, l, s, uwf, pos			& 	0.969				&	0.969 / 0.645
 			\\ \hline
-			w, l, s, uwf, pos, bf		& 						&
+			w, l, s, uwf, pos, bf		& 	0.974				&	0.974 / 0.693
 			\\ \hline
 		\end{tabular}}
 	\end{table}
 	\tiny \textbf{Legend:} \\
 	\textbf{w}: word, \textbf{l}: lowercase word, \textbf{s}: stem, \textbf{uwf}: unknown word features,
 	\textbf{bf}: bigram features, \textbf{pos}: part of speech tags
+\end{frame}
+
+
+% NER: Confusion Matrix CRF (all features)
+\begin{frame}{NER: Confusion Matrix CRF (all features)}{}
+	\begin{figure}
+		\includegraphics[scale=0.1]{img/cm_ner}
+		\caption{Named entity recognition}
+	\end{figure}
 \end{frame}
 
 
@@ -247,6 +270,10 @@
 \begin{frame}{What we have learned...}{}
 	\begin{itemize}
 		\item Feature engineering is 'dirty work' but crucial for later performance
+		\item POS tagging is easier than NER
+		\item Using less training data hurts performance, especially on sentence level \\
+			(e.\,g. POS: foreign words misclassified, mistakes interjection with adjective)
+		\item CRF mostly works 'out-of-the-box'
 		\item POS tagging
 		\begin{itemize}
 			\item Likely transitions: \texttt{MD} $\Rightarrow$ \texttt{VB}; \texttt{NNS} $\Rightarrow$ \texttt{VBP}
@@ -254,8 +281,8 @@
 		\end{itemize}
 		\item NER
 		\begin{itemize}
-			\item Likely transitions: \texttt{} $\Rightarrow$ \texttt{}
-			\item Unlikely transitions: \texttt{} $\Rightarrow$ \texttt{}
+			\item Likely transitions: \texttt{per-giv} $\Rightarrow$ \texttt{per-fam}
+			\item Unlikely transitions: \texttt{per-giv} $\Rightarrow$ \texttt{tim-dat}
 		\end{itemize}
 	\end{itemize}
 \end{frame}
