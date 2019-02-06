@@ -46,7 +46,6 @@ class Feature_Maker():
 
         return re.sub("[0-9]", "d", t)
 
-
     def _wordshape_short(self, t):
         """
         Convert token to short shape string
@@ -59,7 +58,6 @@ class Feature_Maker():
         t = re.sub("[a-z]+", "x", t)
 
         return re.sub("[0-9]+", "d", t)
-
 
     def get_pos_features_nltk(self, X):
         """
@@ -80,16 +78,16 @@ class Feature_Maker():
                                 "word": word,
                                 "lowercasedword": word.lower(),
                                 "stem": self.stemmer.stem(word),
-                                 "prefix1": word[0],
-                                 "prefix2": word[:2],
-                                 "prefix3": word[:3],
-                                 "suffix1": word[-1],
-                                 "suffix2": word[-2:],
-                                 "suffix3": word[-3:],
-                                 "capitalization": word[0].isupper(),
-                                 "shape": self._wordshape(word),
-                                 "previousword": sent[i - 1][0] if i > 1 else "<BEGIN>",
-                                 "nextword": sent[i + 1][0] if i < len(sent) - 1 else "<END>"
+                                "prefix1": word[0],
+                                "prefix2": word[:2],
+                                "prefix3": word[:3],
+                                "suffix1": word[-1],
+                                "suffix2": word[-2:],
+                                "suffix3": word[-3:],
+                                "capitalization": word[0].isupper(),
+                                "shape": self._wordshape(word),
+                                "previousword": sent[i - 1][0] if i > 1 else "<BEGIN>",
+                                "nextword": sent[i + 1][0] if i < len(sent) - 1 else "<END>"
                             }, postag)
 
                 sent_instances.append(instance)
@@ -133,7 +131,6 @@ class Feature_Maker():
 
         return np.asarray(X_), np.asarray(y_)
 
-
     def get_pos_features_crf(self, X):
         """
         Generate feature set for POS tagging
@@ -150,27 +147,26 @@ class Feature_Maker():
                 postag = x[1]
 
                 instance = ({
-                    "word": word,
-                    "lowercasedword": word.lower(),
-                    "stem": self.stemmer.stem(word),
-                    "prefix1": word[0],
-                    "prefix2": word[:2],
-                    "prefix3": word[:3],
-                    "suffix1": word[-1],
-                    "suffix2": word[-2:],
-                    "suffix3": word[-3:],
-                    "capitalization": word[0].isupper(),
-                    "shape": self._wordshape(word),
-#                    "previousword": sent[i-1][0] if i > 0 else "<BEGIN>",
-#                    "nextword": sent[i+1][0] if i < len(sent)-1 else "<END>"
-                }, postag)
+                                "word": word,
+                                "lowercasedword": word.lower(),
+                                "stem": self.stemmer.stem(word),
+                                "prefix1": word[0],
+                                "prefix2": word[:2],
+                                "prefix3": word[:3],
+                                "suffix1": word[-1],
+                                "suffix2": word[-2:],
+                                "suffix3": word[-3:],
+                                "capitalization": word[0].isupper(),
+                                "shape": self._wordshape(word),
+                                #                    "previousword": sent[i-1][0] if i > 0 else "<BEGIN>",
+                                #                    "nextword": sent[i+1][0] if i < len(sent)-1 else "<END>"
+                            }, postag)
 
                 sent_instances.append(instance)
 
             X_.append(sent_instances)
 
         return X_
-
 
     def get_ner_features_nltk(self, X):
         """
@@ -189,7 +185,7 @@ class Feature_Maker():
             for i, x in enumerate(sent):
                 word = x[0]
                 postag = x[1]
-    
+
                 instance = ({
                                 "bias": 1.0,
                                 "word": word,
@@ -208,7 +204,7 @@ class Feature_Maker():
                                 "basepos": postag[:2],
                                 "shape": self._wordshape(word)
                             }, x[2])
-    
+
                 if i > 0:
                     word1 = sent[i - 1][0]
                     postag1 = sent[i - 1][1]
@@ -222,7 +218,7 @@ class Feature_Maker():
                     })
                 else:
                     instance[0]["BOS"] = True
-    
+
                 if i < len(sent) - 1:
                     word1 = sent[i + 1][0]
                     postag1 = sent[i + 1][1]
@@ -236,9 +232,9 @@ class Feature_Maker():
                     })
                 else:
                     instance[0]["EOS"] = True
-                    
+
                 sent_instance.append(instance)
-    
+
             X_.append(sent_instance)
 
         return X_

@@ -26,7 +26,7 @@ from utils import preprocess_raw_data, load_data_list, flatten, \
 
 # global variables
 preprocessing = False  # true: create txt file from data, false: load existing txt file with preprocessed data
-load_entities = True   # true: ner, false: pos-tagging
+load_entities = False   # true: ner, false: pos-tagging
 
 model_type = "CRF"
 most_informative_features = 50
@@ -53,8 +53,8 @@ else:
 # split data into training and test set
 data_train, data_test = train_test_split(data, train_ratio=0.80)
 
-data_train = data_train
-data_test = data_test
+data_train = data_train[:500]
+data_test = data_test[:500]
 
 # print(data_train)
 
@@ -132,7 +132,6 @@ elif model_type == "CRF":
     crf.least_informative_features(most_informative_features)
     crf.likely_transitions()
     crf.unlikely_transitions()
-    print("Sent Acc:", crf.evaluate_sentence(X, y))
     crf.classification_report(X, y)
 
 

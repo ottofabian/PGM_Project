@@ -66,7 +66,7 @@ class CRF(object):
         """
         return self.crf.predict(X)
 
-    def evaluate(self, X, y_):
+    def evaluate(self, X, y):
         """
         Evaluates the trained crf model.
         
@@ -74,41 +74,31 @@ class CRF(object):
         :param y:   test labels
         :return:    evaluation result
         """
-        y = self.crf.predict(X)
-        
-        n_sent_correct = 0
-        num_sent = len(X)
+        y_pred = self.crf.predict(X)
 
-        for i in range(num_sent):
-            sentence_correct = True
-            for j in range(len(y_[i])):
-                if y_[i][j] != y[i][j]:
-                    sentence_correct = False
-                    
-            if sentence_correct == True:
-                n_sent_correct += 1 
+        sent_level_acc = self.evaluate_sentence(X, y, y_pred)
 
-        labels = flatten(y_)
-        y = flatten(y)
-        
+        labels = flatten(y)
+        y_pred = flatten(y_pred)
+
         print("F1 score:")
-        print(sklearn.metrics.precision_recall_fscore_support(labels, y, average='micro'))
+        print(sklearn.metrics.precision_recall_fscore_support(labels, y_pred, average='micro'))
         print()
         print("Accuracy:")
-        print(sklearn.metrics.accuracy_score(labels, y))
+        print(sklearn.metrics.accuracy_score(labels, y_pred))
         print()
         print("Sentence level accuracy:")
-        print(n_sent_correct / num_sent)
+        print(sent_level_acc)
         print()
         print("F1 score per class:")
-        print(sklearn.metrics.precision_recall_fscore_support(labels, y))
+        print(sklearn.metrics.precision_recall_fscore_support(labels, y_pred))
         print()
         print("Confusion matrix:")
-        cfm = sklearn.metrics.confusion_matrix(labels, y)
+        cfm = sklearn.metrics.confusion_matrix(labels, y_pred)
 
         plot_confusion_matrix(cfm, np.unique(labels))
 
-    def evaluate_sentence(self, X, y):
+    def evaluate_sentence(self, X, y, y_pred):
         """
         Evaluates the trained crf model on sentence level.
         
@@ -116,7 +106,6 @@ class CRF(object):
         :param y:   test labels
         :return:    evaluation result / accuracy
         """
-        y_pred = self.crf.predict(X)
 
         correct_count = 0
         num_sent = len(y)
