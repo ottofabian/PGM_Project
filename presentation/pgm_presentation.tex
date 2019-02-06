@@ -51,6 +51,15 @@
 \end{frame}
 
 
+% Model Overview
+\begin{frame}{Model Overview}{}
+	\begin{figure}
+		\includegraphics[scale=0.25]{img/model_overview}
+		\caption{Model overview}
+	\end{figure}
+\end{frame}
+
+
 % Part of Speech Tagging
 \begin{frame}{Part of Speech Tagging}{}
 	\begin{figure}
@@ -171,12 +180,12 @@
 % Results (Ctd.)
 \begin{frame}{Results (Ctd.)}{POS Tagging}
 	\begin{table}[h]
-		\scalebox{1.0}{
+		\scalebox{0.8}{
 		\begin{tabular}{| c | c | c |}
 			\hline
 			\multicolumn{3}{| c |}{\textbf{CRF} [POS]}
 			\\ \hline\hline
-			\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc (w / s)}
+			\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Accuracy (w / s)}
 			\\ \hline\hline
 			w, l, s 				& 	0.974				&  	0.974 / 0.607	
 			\\ \hline
@@ -330,13 +339,16 @@
 % What we have learned...
 \begin{frame}{What we have learned...}{}
 	\begin{itemize}
-		\item Feature engineering is 'dirty work' but \textbf{crucial} for later performance of the model
+		\item Feature engineering is 'dirty work' but \textbf{crucial} for later model performance 
 		\item POS tagging is \textbf{easier} than NER
 		\item Using less training data \textbf{hurts performance}, especially on sentence level \\
 			(e.\,g. POS: foreign words misclassified, mistakes interjection with adjective)
 		\item CRF mostly works \textbf{'out-of-the-box'}; we conducted a random search and noticed only tiny differences 
 			($\le 0.03$)
-		\item We tried word embeddings with limited success
+		\item We tried word embeddings (GloVe) for POS tagging with limited success
+		\item \textbf{Little data:} On approx. 1,000 (= 2\,\%) training sentences, we got a word accuracy of 0.952
+			(frequency of majority tag \texttt{NN} $\approx$ 0.14)
+		\item Sentence level accuracy volatile ($\approx$ 0.50)
 	\end{itemize}
 \end{frame}
 
