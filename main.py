@@ -53,8 +53,8 @@ else:
 # split data into training and test set
 data_train, data_test = train_test_split(data, train_ratio=0.80)
 
-data_train = data_train[:500]
-data_test = data_test[:500]
+data_train = data_train
+data_test = data_test
 
 # print(data_train)
 
