@@ -76,7 +76,7 @@ class CRF(object):
         """
         y_pred = self.crf.predict(X)
 
-        sent_level_acc = self.evaluate_sentence(X, y, y_pred)
+        sent_level_acc = self.evaluate_sentence(y, y_pred)
 
         labels = flatten(y)
         y_pred = flatten(y_pred)
@@ -98,7 +98,7 @@ class CRF(object):
 
         plot_confusion_matrix(cfm, np.unique(labels))
 
-    def evaluate_sentence(self, X, y, y_pred):
+    def evaluate_sentence(self, y, y_pred):
         """
         Evaluates the trained crf model on sentence level.
         
