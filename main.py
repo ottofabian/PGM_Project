@@ -26,7 +26,7 @@ from utils import preprocess_raw_data, load_data_list, flatten, \
 
 # global variables
 preprocessing = False  # true: create txt file from data, false: load existing txt file with preprocessed data
-load_entities = False   # true: ner, false: pos-tagging
+load_entities = True   # true: ner, false: pos-tagging
 
 model_type = "CRF"
 most_informative_features = 50

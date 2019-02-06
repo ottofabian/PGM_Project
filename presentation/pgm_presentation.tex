@@ -3,7 +3,7 @@
 % Presentation data
 % ====================================================
 
-\title[PGM Project Presentation]{* * * PGM: Final Project Presentation * * * PoS-Tagging and NER}
+\title[PGM Project Presentation]{* * * PGM: Final Project Presentation * * * POS-Tagging and NER}
 \institute{TU Darmstadt}
 \author{C. Biehl, F. Otto, D. Wehner}
 \date{\today}
@@ -51,6 +51,23 @@
 \end{frame}
 
 
+% Part of Speech Tagging
+\begin{frame}{Part of Speech Tagging}{}
+	\begin{figure}
+		\includegraphics[scale=0.4]{img/pos_tagging}
+		\caption{Part of speech tagging}
+	\end{figure}
+\end{frame}
+
+
+% Named Entity Recognition
+\begin{frame}{Part of Speech Tagging}{}
+	\begin{figure}
+		\includegraphics[scale=0.35]{img/ner}
+		\caption{Named entity recognition}
+	\end{figure}
+\end{frame}
+
 \section{Process and Tools}
 
 % Process and Tools
@@ -79,7 +96,7 @@
 				\hline
 				\multicolumn{3}{| c |}{\textbf{Na\"{i}ve Bayes} [POS]}
 				\\ \hline\hline
-				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Accuracy}
+				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc (w / s)}
 				\\ \hline\hline
 				w, l, s 				& 	0.927				& 	0.927 / 0.240
 				\\ \hline
@@ -98,14 +115,16 @@
 				\hline
 				\multicolumn{3}{| c |}{\textbf{HMM} [POS]}
 				\\ \hline\hline
-				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Accuracy}
+				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc (w / s)}
 				\\ \hline\hline
+				word sequence 		&	0.837 				& 	0.837 / 0.496
+				\\ \hline
 			\end{tabular}}
 		\end{table}
 	}
 	\tiny \textbf{Legend:} \\
 	\textbf{w}: word, \textbf{l}: lowercase word, \textbf{s}: stem, \textbf{uwf}: unknown word features,
-	\textbf{bf}: bigram features, \textbf{pos}: part of speech tags
+	\textbf{bf}: bigram features
 \end{frame}
 
 
@@ -117,21 +136,30 @@
 			\hline
 			\multicolumn{3}{| c |}{\textbf{CRF} [POS]}
 			\\ \hline\hline
-			\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Accuracy}
+			\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc (w / s)}
 			\\ \hline\hline
-			w, l, s 				& 	0.973				& 	0.973 / 0.605
+			w, l, s 				& 						& 	
 			\\ \hline
-			w, l, s, uwf				&	0.980				&	0.980 / 0.680
+			w, l, s, uwf				&	0.980				&	0.980 / 0.749
 			\\ \hline
-			w, l, s, bf 				& 	0.980 				&	0.980 / 0.677
+			w, l, s, bf 				& 			 			&	
 			\\ \hline
-			w, l, s, uwf, bf			& 	0.984 				& 	0.984 / 0.734
+			w, l, s, uwf, bf			& 	0.985 				& 	0.985 / 0.740
 			\\ \hline
 		\end{tabular}}
 	\end{table}
 	\tiny \textbf{Legend:} \\
 	\textbf{w}: word, \textbf{l}: lowercase word, \textbf{s}: stem, \textbf{uwf}: unknown word features,
-	\textbf{bf}: bigram features, \textbf{pos}: part of speech tags
+	\textbf{bf}: bigram features
+\end{frame}
+
+
+% Confusion Matrix CRF (all features)
+\begin{frame}{Confusion Matrix CRF (all features)}{}
+	\begin{figure}
+		\includegraphics[scale=0.08]{img/cm_pos}
+		\caption{Named entity recognition}
+	\end{figure}
 \end{frame}
 
 
@@ -144,15 +172,15 @@
 				\hline
 				\multicolumn{3}{| c |}{\textbf{Na\"{i}ve Bayes} [NER]}
 				\\ \hline\hline
-				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Accuracy}
+				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc (w / s)}
 				\\ \hline\hline
-				w, l					& 	0.921				& 	0.921 / 0.262
+				w, l, s				& 	0.921				& 	0.921 / 0.262
 				\\ \hline
-				w, l, uwf				&	0.922				&	0.922 / 0.237
+				w, l, s, uwf				&	0.922				&	0.922 / 0.237
 				\\ \hline
-				w, l, uwf, pos			& 	0.921 				&	0.921 / 0.240
+				w, l, s, uwf, pos			& 	0.921 				&	0.921 / 0.240
 				\\ \hline
-				w, l, uwf, pos, bf		& 	0.929 				& 	0.929 / 0.288
+				w, l, s, uwf, pos, bf		& 	0.929 				& 	0.929 / 0.288
 				\\ \hline
 			\end{tabular}}
 		\end{table}
@@ -163,8 +191,10 @@
 				\hline
 				\multicolumn{3}{| c |}{\textbf{HMM} [NER]}
 				\\ \hline\hline
-				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Accuracy}
+				\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc (w / s)}
 				\\ \hline\hline
+				word sequence			&	0.946				& 	0.946 / 0.523
+				\\ \hline
 			\end{tabular}}
 		\end{table}
 	}
@@ -178,12 +208,20 @@
 \begin{frame}{Results (Ctd.)}{Named Entity Recognition}
 	\begin{table}[h]
 		\scalebox{0.8}{
-		\begin{tabular}{| c | c | c | c |}
+		\begin{tabular}{| c |  c | c |}
 			\hline
-			\multicolumn{4}{| c |}{\textbf{CRF} [NER]}
+			\multicolumn{3}{| c |}{\textbf{CRF} [NER]}
 			\\ \hline\hline
-			\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Acc word}	& 	\textbf{Acc sent}
+			\textbf{Features}		&	\textbf{F1 score}		& 	\textbf{Accuracy (w / s)}
 			\\ \hline\hline
+			w, l, s	 			& 	0.974				&	0.974 / 0.694
+			\\ \hline
+			w, l, s, uwf 			& 	0.974				& 	0.974 / 0.694
+			\\ \hline
+			w, l, s, uwf, pos			& 						&
+			\\ \hline
+			w, l, s, uwf, pos, bf		& 						&
+			\\ \hline
 		\end{tabular}}
 	\end{table}
 	\tiny \textbf{Legend:} \\
@@ -201,6 +239,24 @@
 		\item Naive Bayes confuses \texttt{tim-clo} and \texttt{tim-dat} often
 		\item HMM incorrectly predicts \texttt{DET} tag (POS) very often
 		\item HMM incorrectly predicts \texttt{O} tag (NER) very often
+	\end{itemize}
+\end{frame}
+
+
+% What we have learned...
+\begin{frame}{What we have learned...}{}
+	\begin{itemize}
+		\item Feature engineering is 'dirty work' but crucial for later performance
+		\item POS tagging
+		\begin{itemize}
+			\item Likely transitions: \texttt{MD} $\Rightarrow$ \texttt{VB}; \texttt{NNS} $\Rightarrow$ \texttt{VBP}
+			\item Unlikely transitions: \texttt{DT} $\Rightarrow$ \texttt{DT}; \texttt{VBD} $\Rightarrow$ \texttt{VBD}
+		\end{itemize}
+		\item NER
+		\begin{itemize}
+			\item Likely transitions: \texttt{} $\Rightarrow$ \texttt{}
+			\item Unlikely transitions: \texttt{} $\Rightarrow$ \texttt{}
+		\end{itemize}
 	\end{itemize}
 \end{frame}
 

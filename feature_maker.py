@@ -187,7 +187,7 @@ class Feature_Maker():
                 postag = x[1]
 
                 instance = ({
-                                "bias": 1.0,
+#                                "bias": 1.0,
                                 "word": word,
                                 "lowercasedword": word.lower(),
                                 "stem": self.stemmer.stem(word),
@@ -205,33 +205,33 @@ class Feature_Maker():
                                 "shape": self._wordshape(word)
                             }, x[2])
 
-                if i > 0:
-                    word1 = sent[i - 1][0]
-                    postag1 = sent[i - 1][1]
-                    instance[0].update({
-                        "-1:lowercasedword": word1.lower(),
-                        "-1:istitle": word1.istitle(),
-                        "-1:isuppercase": word1.isupper(),
-                        "-1:postag": postag1,
-                        "-1:basepos": postag1[:2],
-                        "-1:shape": self._wordshape(word1)
-                    })
-                else:
-                    instance[0]["BOS"] = True
-
-                if i < len(sent) - 1:
-                    word1 = sent[i + 1][0]
-                    postag1 = sent[i + 1][1]
-                    instance[0].update({
-                        "+1:lowercasedword": word1.lower(),
-                        "+1:istitle": word1.istitle(),
-                        "+1:isuppercase": word1.isupper(),
-                        "+1:postag": postag1,
-                        "+1:basepos": postag1[:2],
-                        "+1:shape": self._wordshape(word1)
-                    })
-                else:
-                    instance[0]["EOS"] = True
+#                if i > 0:
+#                    word1 = sent[i - 1][0]
+#                    postag1 = sent[i - 1][1]
+#                    instance[0].update({
+#                        "-1:lowercasedword": word1.lower(),
+#                        "-1:istitle": word1.istitle(),
+#                        "-1:isuppercase": word1.isupper(),
+#                        "-1:postag": postag1,
+#                        "-1:basepos": postag1[:2],
+#                        "-1:shape": self._wordshape(word1)
+#                    })
+#                else:
+#                    instance[0]["BOS"] = True
+#
+#                if i < len(sent) - 1:
+#                    word1 = sent[i + 1][0]
+#                    postag1 = sent[i + 1][1]
+#                    instance[0].update({
+#                        "+1:lowercasedword": word1.lower(),
+#                        "+1:istitle": word1.istitle(),
+#                        "+1:isuppercase": word1.isupper(),
+#                        "+1:postag": postag1,
+#                        "+1:basepos": postag1[:2],
+#                        "+1:shape": self._wordshape(word1)
+#                    })
+#                else:
+#                    instance[0]["EOS"] = True
 
                 sent_instance.append(instance)
 
