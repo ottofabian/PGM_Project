@@ -153,7 +153,7 @@ class CRF(object):
             cv=3,
             verbose=1,
             n_jobs=-1,
-            n_iter=50,
+            n_iter=20,
             scoring=f1_scorer
         )
 

@@ -12,6 +12,9 @@ Created on Tue Jan  8 10:47:08 2019
 
 import time
 import pickle
+import math
+from nltk.probability import FreqDist
+import matplotlib.pyplot as plt
 
 from hmm import HMM
 from crf import CRF
@@ -50,11 +53,21 @@ else:
     path = "data_POS.txt" if not load_entities else "data_NER.txt"
     data = load_data_list(path)
 
-# split data into training and test set
-data_train, data_test = train_test_split(data, train_ratio=0.80)
+#data = data[:math.ceil(len(data)/4)]
+    
+#fig = plt.figure()
+#fig.set_size_inches(12, 12)
+#fd = FreqDist([t[1] for sent in data for t in sent])
+#total = fd.N()
+#for word in fd:
+#    fd[word] /= float(total)
+#
+#fd.plot()
 
-data_train = data_train
-data_test = data_test
+# split data into training and test set
+data_train, data_test = train_test_split(data, train_ratio=0.01)
+
+del data
 
 # print(data_train)
 
@@ -114,11 +127,18 @@ elif model_type == "CRF":
         data_train) if not load_entities else feature_maker.get_ner_features_crf(data_train)
     features_test = feature_maker.get_pos_features_crf(
         data_test) if not load_entities else feature_maker.get_ner_features_crf(data_test)
+    
+    del data_train
+    del data_test
+    
     X, y = separate_labels_from_features(features_train)
-
     X_test, y_test = separate_labels_from_features(features_test)
+    
+    del features_train
+    del features_test
 
-    crf = CRF()
+#    crf = CRF(c1=0.3684, c2=0.0125) # embeddings
+    crf = CRF(c1=0.4043, c2=0.1653) # hand-crafted features
     crf.fit(X, y)
 
     print("Done with CRF learning")
@@ -127,7 +147,7 @@ elif model_type == "CRF":
 
     print(crf.evaluate(X_test, y_test))
 
-    #crf.optimize_hyperparameters(X, y, plot=True)
+#    crf.optimize_hyperparameters(X, y, plot=True)
     crf.most_informative_features(most_informative_features)
     crf.least_informative_features(most_informative_features)
     crf.likely_transitions()
