@@ -61,7 +61,7 @@
 
 
 % Named Entity Recognition
-\begin{frame}{Part of Speech Tagging}{}
+\begin{frame}{Named Entity Recognition}{}
 	\begin{figure}
 		\includegraphics[scale=0.35]{img/ner}
 		\caption{Named entity recognition}
@@ -87,15 +87,21 @@
 
 % Data Set
 \begin{frame}{Data Set}{}
-	\begin{itemize}
-		\item We used the \textbf{Groningen Meaning Bank}
-		\item \url{http://gmb.let.rug.nl/data.php}
-		\item Corpus of public domain texts:
+	\divideTwo{0.59}{
 		\begin{itemize}
-			\item 1.4 milion words
-			\item automatically produced, manually corrected (silver labels)
+			\item We used the \textbf{Groningen Meaning Bank}
+			\item \url{http://gmb.let.rug.nl/data.php}
+			\item Corpus of public domain texts:
+			\begin{itemize}
+				\item 1.4 milion words
+				\item automatically produced, manually corrected (silver labels)
+			\end{itemize}
 		\end{itemize}
-	\end{itemize}
+	}{0.39}{
+		\begin{figure}
+			\fbox{\includegraphics[scale=0.5]{img/groningen_meaning_bank}}
+		\end{figure}
+	}
 \end{frame}
 
 
@@ -139,6 +145,10 @@
 	\tiny \textbf{Legend:} \\
 	\textbf{w}: word, \textbf{l}: lowercase word, \textbf{s}: stem, \textbf{uwf}: unknown word features,
 	\textbf{bf}: bigram features
+	
+	\vspace*{2mm}
+	\normalsize
+	\textit{Bi-LSTM Baseline:} 0.950 [Bjerva et al., 2016]
 \end{frame}
 
 
@@ -215,6 +225,10 @@
 	\tiny \textbf{Legend:} \\
 	\textbf{w}: word, \textbf{l}: lowercase word, \textbf{s}: stem, \textbf{uwf}: unknown word features,
 	\textbf{bf}: bigram features, \textbf{pos}: part of speech tags
+	
+	\vspace*{2mm}
+	\normalsize
+	\textit{LSTM Baseline:} 0.931 [Akbik et al., 2018],  \textcolor{red}{different data set: \textbf{CoNLL03}}
 \end{frame}
 
 
@@ -253,6 +267,28 @@
 \end{frame}
 
 
+% NER: Random Search for CRF
+\begin{frame}{NER: Random Search for CRF}{}
+	\divideTwo{0.49}{
+		\vspace*{2mm}
+		\begin{figure}
+			\includegraphics[scale=0.22]{img/crf_hyperparam_search}
+			\caption{Random Search CRF}
+		\end{figure}
+	}{0.49}{
+		\begin{itemize}
+			\item \texttt{C1}: $L_1$-regularization
+			\item \texttt{C2}: $L_2$-regularization
+			\item Best parameters found:
+			\begin{itemize}
+				\item c1: 0.40431785916906465
+				\item c2: 0.16525290148249140
+			\end{itemize}
+		\end{itemize}
+	}
+\end{frame}
+
+
 % Comparison
 \begin{frame}{Result Comparison}{}
 	\begin{itemize}
@@ -260,8 +296,17 @@
 			$\Rightarrow$ context knowledge!
 		\item Naive Bayes predicts \texttt{per-tit} very often
 		\item Naive Bayes confuses \texttt{tim-clo} and \texttt{tim-dat} often
-		\item HMM incorrectly predicts \texttt{DET} tag (POS) very often
-		\item HMM incorrectly predicts \texttt{O} tag (NER) very often
+		\item HMM incorrectly predicts \texttt{DET} tag (POS) and \texttt{O} tag (NER) very often
+		\item \textbf{POS tagging}
+		\begin{itemize}
+			\item Likely transitions: \texttt{MD} $\Rightarrow$ \texttt{VB}; \texttt{NNS} $\Rightarrow$ \texttt{VBP}
+			\item Unlikely transitions: \texttt{DT} $\Rightarrow$ \texttt{DT}; \texttt{VBD} $\Rightarrow$ \texttt{VBD}
+		\end{itemize}
+		\item \textbf{NER}
+		\begin{itemize}
+			\item Likely transitions: \texttt{per-giv} $\Rightarrow$ \texttt{per-fam}
+			\item Unlikely transitions: \texttt{per-giv} $\Rightarrow$ \texttt{tim-dat}
+		\end{itemize}
 	\end{itemize}
 \end{frame}
 
@@ -269,21 +314,13 @@
 % What we have learned...
 \begin{frame}{What we have learned...}{}
 	\begin{itemize}
-		\item Feature engineering is 'dirty work' but crucial for later performance
-		\item POS tagging is easier than NER
-		\item Using less training data hurts performance, especially on sentence level \\
+		\item Feature engineering is 'dirty work' but \textbf{crucial} for later performance of the model
+		\item POS tagging is \textbf{easier} than NER
+		\item Using less training data \textbf{hurts performance}, especially on sentence level \\
 			(e.\,g. POS: foreign words misclassified, mistakes interjection with adjective)
-		\item CRF mostly works 'out-of-the-box'
-		\item POS tagging
-		\begin{itemize}
-			\item Likely transitions: \texttt{MD} $\Rightarrow$ \texttt{VB}; \texttt{NNS} $\Rightarrow$ \texttt{VBP}
-			\item Unlikely transitions: \texttt{DT} $\Rightarrow$ \texttt{DT}; \texttt{VBD} $\Rightarrow$ \texttt{VBD}
-		\end{itemize}
-		\item NER
-		\begin{itemize}
-			\item Likely transitions: \texttt{per-giv} $\Rightarrow$ \texttt{per-fam}
-			\item Unlikely transitions: \texttt{per-giv} $\Rightarrow$ \texttt{tim-dat}
-		\end{itemize}
+		\item CRF mostly works \textbf{'out-of-the-box'}; we conducted a random search and noticed only tiny differences 
+			($\le 0.03$)
+		\item We tried word embeddings with limited success
 	\end{itemize}
 \end{frame}
 
