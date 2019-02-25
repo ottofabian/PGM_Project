@@ -31,7 +31,7 @@ from utils import preprocess_raw_data, load_data_list, flatten, \
 preprocessing = False  # true: create txt file from data, false: load existing txt file with preprocessed data
 load_entities = False   # true: ner, false: pos-tagging
 
-model_type = "HMM"
+model_type = "CRF"
 most_informative_features = 50
 
 
@@ -65,7 +65,8 @@ else:
 #fd.plot()
 
 # split data into training and test set
-data_train, data_test = train_test_split(data, train_ratio=0.01)
+data = data[:100]
+data_train, data_test = train_test_split(data, train_ratio=0.80)
 
 del data
 
@@ -118,6 +119,11 @@ elif model_type == "NB":
     print()
     # most informative features
     nb.clf_nltk.show_most_informative_features(most_informative_features)
+    
+    # show misclassifications
+    features_test, labels_test = separate_labels_from_features(data_test)
+    predictions = hmm.predict(features_test)
+    show_misclassifications(data_test, predictions)
 
 elif model_type == "CRF":
     # fit crf model
@@ -128,13 +134,13 @@ elif model_type == "CRF":
         data_test) if not load_entities else feature_maker.get_ner_features_crf(data_test)
     
     del data_train
-    del data_test
+    #del data_test
     
     X, y = separate_labels_from_features(features_train)
     X_test, y_test = separate_labels_from_features(features_test)
     
     del features_train
-    del features_test
+    #del features_test
 
 #    crf = CRF(c1=0.3684, c2=0.0125) # embeddings
     crf = CRF(c1=0.4043, c2=0.1653) # hand-crafted features
@@ -152,6 +158,11 @@ elif model_type == "CRF":
     crf.likely_transitions()
     crf.unlikely_transitions()
     crf.classification_report(X, y)
+    
+    # show misclassifications
+    features_test, labels_test = separate_labels_from_features(data_test)
+    predictions = hmm.predict(features_test)
+    show_misclassifications(data_test, predictions)
 
 
 ## execute main program
