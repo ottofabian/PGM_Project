@@ -197,12 +197,13 @@ def separate_labels_from_features(X):
     return features, labels
 
 
-def show_misclassifications(gold_labels, pred_labels):
+def show_misclassifications(gold_labels, pred_labels, n=50):
     """
     Show misclassifications made by the model.
 
     :param gold_labels: true labels
     :param pred_labels: predicted labels
+    :param n:           number of misclassifications to be shown
     """
     # flatten lists for comparison
     gold_labels = flatten(gold_labels)
@@ -210,8 +211,11 @@ def show_misclassifications(gold_labels, pred_labels):
 
     for i in range(len(gold_labels)):
         if pred_labels[i] != gold_labels[i][1]:
+            if n == 0:
+                break
             print(gold_labels[i][0], "\t",
                   pred_labels[i], "\t", gold_labels[i][1])
+            n -= 1
 
 
 def flatten(l):

@@ -26,9 +26,9 @@ from utils import preprocess_raw_data, load_data_list, flatten, \
 
 # global variables
 preprocessing = False  # true: create txt file from data, false: load existing txt file with preprocessed data
-load_entities = True   # true: ner, false: pos-tagging
+load_entities = False   # true: ner, false: pos-tagging
 
-model_type = "CRF"
+model_type = "HMM"
 most_informative_features = 50
 
 
@@ -80,10 +80,9 @@ if model_type == "HMM":
     # plot confusion matrix, calculate precision, recall, f1-score
     hmm.evaluate(data_test)
     # show misclassifications
-    #features_test, labels_test = separate_labels_from_features(data_test)
-    #predictions = hmm.predict(features_test)
-    #print("GET READY FOR SPAM!!!")
-    #show_misclassifications(data_test, predictions)
+    features_test, labels_test = separate_labels_from_features(data_test)
+    predictions = hmm.predict(features_test)
+    show_misclassifications(data_test, predictions)
 
 elif model_type == "NB":
     # fit naive bayes model
