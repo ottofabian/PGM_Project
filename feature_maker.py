@@ -32,6 +32,7 @@ class Feature_Maker():
         Constructor.
         """
         self.stemmer = SnowballStemmer("english")
+#        self.load_glove_embeddings("glove.6B.100d.txt")
 
     def _wordshape(self, t):
         """
@@ -313,3 +314,57 @@ class Feature_Maker():
             X_.append(sent_instances)
 
         return X_
+    
+    
+    def load_glove_embeddings(self, path):
+        f = open(path, 'r')
+        model = {}
+        for line in f:
+            splitLine = line.split()
+            word = splitLine[0]
+            embedding = np.array([float(val) for val in splitLine[1:]])
+            model[word] = embedding
+        print("Loaded " + str(len(model)) + " embeddings.")
+        
+        self.embeddings = model
+    
+    
+    def embed(self, word):
+        if word in self.embeddings:
+            return self.embeddings[word]
+        else:
+            return self.embeddings["unk"]
+
+
+    def get_ner_features_crf_embeddings(self, X):
+        """
+        Generate feature set for NER tagging
+
+        @param X: list of tuples [(w1, pos1, t1), (w2, pos2, t2), ...]
+        @returns: dict of features
+        """
+        X_ = []
+
+        if len(X[0][0]) < 3:
+            raise ValueError("Expected list of tuples in form [(w1, pos1, t1), (w2, pos2, t2), ...].")
+
+        for sent in X:
+            sent_instances = []
+            for i, x in enumerate(sent):
+                word = x[0]
+                postag = x[1]
+                
+                instance = ({
+                                "bias": 1.0
+                            }, x[2])
+    
+                embedding = self.embed(word)
+                for i in range(embedding.shape[0]):
+                    instance[0]['glove-' + str(i+1)] = float(embedding[i])
+
+                sent_instances.append(instance)
+                
+            X_.append(sent_instances)
+            
+        return X_
+        
