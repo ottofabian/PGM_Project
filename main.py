@@ -31,7 +31,7 @@ from utils import preprocess_raw_data, load_data_list, flatten, \
 preprocessing = False  # true: create txt file from data, false: load existing txt file with preprocessed data
 load_entities = False   # true: ner, false: pos-tagging
 
-model_type = "CRF"
+model_type = "NB"
 most_informative_features = 50
 
 
@@ -65,7 +65,7 @@ else:
 #fd.plot()
 
 # split data into training and test set
-data = data[:100]
+data = data[:100]   
 data_train, data_test = train_test_split(data, train_ratio=0.80)
 
 del data
@@ -121,8 +121,7 @@ elif model_type == "NB":
     nb.clf_nltk.show_most_informative_features(most_informative_features)
     
     # show misclassifications
-    features_test, labels_test = separate_labels_from_features(data_test)
-    predictions = hmm.predict(features_test)
+    predictions = nb.predict_nltk(data_test_featurized)
     show_misclassifications(data_test, predictions)
 
 elif model_type == "CRF":
@@ -161,7 +160,7 @@ elif model_type == "CRF":
     
     # show misclassifications
     features_test, labels_test = separate_labels_from_features(data_test)
-    predictions = hmm.predict(features_test)
+    predictions = crf.predict(features_test)
     show_misclassifications(data_test, predictions)
 
 

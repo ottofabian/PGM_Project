@@ -48,7 +48,23 @@ class Naive_Bayes(object):
         :param X:           data to predict labels for
         :return:            labels for the data
         """
-        return self.clf_nltk.predict(X)
+        X_, y_ = separate_labels_from_features(X)
+        
+        y = []
+        n_sent_correct = 0
+        num_sent = len(y_)
+        
+        for i in range(num_sent):
+            sentence_correct = True
+            for j in range(len(y_[i])):
+                y.append(self.clf_nltk.classify(X_[i][j]))
+                if y_[i][j] != y[-1]:
+                    sentence_correct = False
+                    
+            if sentence_correct == True:
+                n_sent_correct += 1
+                
+        return flatten(y_)
 
 
     def evaluate_nltk(self, X):
