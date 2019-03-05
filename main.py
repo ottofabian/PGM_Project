@@ -31,7 +31,7 @@ from utils import preprocess_raw_data, load_data_list, flatten, \
 preprocessing = False  # true: create txt file from data, false: load existing txt file with preprocessed data
 load_entities = False   # true: ner, false: pos-tagging
 
-model_type = "NB"
+model_type = "CRF"
 most_informative_features = 50
 
 

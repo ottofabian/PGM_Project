@@ -159,8 +159,8 @@ class Feature_Maker():
                                 "suffix3": word[-3:],
                                 "capitalization": word[0].isupper(),
                                 "shape": self._wordshape(word),
-                                #                    "previousword": sent[i-1][0] if i > 0 else "<BEGIN>",
-                                #                    "nextword": sent[i+1][0] if i < len(sent)-1 else "<END>"
+                                "previousword": sent[i-1][0] if i > 0 else "<BEGIN>",
+                                "nextword": sent[i+1][0] if i < len(sent)-1 else "<END>"
                             }, postag)
 
                 sent_instances.append(instance)
